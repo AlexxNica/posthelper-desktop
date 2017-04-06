@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>PostHelper - Packet Print</title>
+	<style type="text/css">
+		span {
+			font-family: monospace;
+		}
+		table {
+			border-collapse: collapse;
+		}
+		td, th {
+			padding: 3px;
+			border: 1px solid black;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+	<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+	<script type="text/javascript" src="../../js/date.js"></script>
+	<script type="text/javascript" src="../../js/packetprint.js"></script>
+	<script type="text/javascript">
+		$( function() {
+			packetPrintTabInit();
+		});
+	</script>
+</head>
+<body>
+<div id="packetTypeSelect" class="ui-widget">
+	<fieldset id="listTypeSet">
+		<legend>Выбрать тип отправлений</legend>
+		<label for="noNumRadio">Без номера</label>
+		<input type="radio" name="radio-1" id="noNumRadio">
+		<label for="numRadio">С номером</label>
+		<input type="radio" name="radio-1" id="numRadio">
+	</fieldset>
+	<button id="selectTypeButton">Создать</button>
+</div>
+<div id="packetList">
+	<div id="inputPacketWidget" class="ui-widget">
+		<label for="scoreOutput">Количество: </label>
+		<div id="scoreOutput">0</div>
+		<label for="adrNumber" id="adrNumberLabel">Номер:</label>
+		<input type="text" id="adrNumber" size="4">
+		<label for="adrName">Имя:</label>
+		<input type="text" id="adrName">
+		<label for="adrAddress">Адрес:</label>
+		<input type="text" id="adrAddress" size="20">
+		<br>
+		<button id="addPacketButton">Добавить</button>
+		<button id="printPacketButton">Сохранить/печать</button>
+	</div>
+	<div class="ui-widget">
+		<div style="overflow-y: scroll; height: 300px; margin-top: 10px;">
+			<table id="adrList">
+				<tr>
+					<th>Вх. №</th>
+					<th width="300px">Имя получателя</th>
+					<th>Адрес получателя</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+</body>
+</html>

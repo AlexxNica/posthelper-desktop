@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>PostHelper - Phone Codes</title>
+	<link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+	<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+	<script type="text/javascript" src="../../js/phonecodes.js"></script>
+	<script type="text/javascript">
+		$( function() {
+			phoneCodesTabInit();
+		});
+	</script>
+</head>
+<body>
+	<div id="inputCodeWidget" class="ui-widget">
+		<label for="codeInput">Код: </label>
+		<input id="codeInput" onchange="inputCode = this.value;">
+        <button id="findCodeButton">Найти</button>
+	</div>
+	<div class="ui-widget">
+		<div id="carrierOutput"></div>
+	</div>
+</body>
+</html>
