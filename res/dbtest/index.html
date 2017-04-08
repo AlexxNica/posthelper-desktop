@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
 	<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
 	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
-	<script type="text/javascript" src="../../js/database.js"></script>
+	<script type="text/javascript" src="database.js"></script>
 	<script type="text/javascript">
 		$( function() {
             dbTestInit();
@@ -19,7 +19,7 @@
 		<button id="initTableButton">Init Table</button>
 		<br>
 		<label for="dbName">Name:</label>
-		<input type="text" id="dbName">
+		<input type="text" id="dbName" onkeydown="javascript: if (event.keyCode == 13) {document.getElementById('dbAddress').focus(); selectAddress($('#dbName').val())}">
 		<label for="dbAddress">Address</label>
 		<input type="text" id="dbAddress">
 		<button id="commitToDB">Commit</button>

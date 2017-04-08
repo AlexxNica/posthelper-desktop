@@ -14,6 +14,21 @@ Date.prototype.toStringF = function () {
     return dd + "." + mm + "." + yyyy;
 };
 
+Date.prototype.toStringFShort = function() {
+	var dd = this.getDate();
+	var mm = this.getMonth() + 1;
+
+	if (dd < 10) {
+		dd = "0" + dd;
+	}
+
+	if (mm < 10) {
+		mm = "0" + mm;
+	}
+
+	return dd + "_" + mm;
+}
+
 Date.prototype.toStringT = function() {
 	var hh = this.getHours();
 	var mm = this.getMinutes();

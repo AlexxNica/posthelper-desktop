@@ -1,4 +1,7 @@
-nw.Window.open('index.html', {}, function(win) {
+loadApp();
+
+function loadApp() {
+    nw.Window.open('index.html', {}, function(win) {
     win.maximize();
     var main_menu = new nw.Menu({ type: 'menubar' });
 
@@ -42,18 +45,7 @@ nw.Window.open('index.html', {}, function(win) {
     propertiesMenu.append(new nw.MenuItem({ 
         label: 'О программе',
         click: function() {
-            alert(
-                "PostHelper/Desktop v0.4.0a\n" +
-                "Ap.t, 2017\n" +
-                "Создано с использованием:\n" +
-                "\t- jQuery UI 1.12.1\n" +
-                "\t- NW.js 0.21.3 linux-x64\n" +
-                "\t\t - Chromium 57.0.2987.110\n" +
-                "\t\t - Node 7.7.3\n" +
-                "\n" +
-                "Веб-версия доступна по адресу:\n" +
-                "https://apt-ma.github.io/posthelper"
-            );
+            nw.Window.open('res/about/index.html');
         } 
     }));
 
@@ -72,3 +64,4 @@ nw.Window.open('index.html', {}, function(win) {
 
     win.menu = main_menu;
 });
+}

@@ -1,2 +1,2 @@
-# posthelper-desktop
-Desktop version of PostHelper based on nw.js
+# posthelper
+Tiny utilty for tiny needs of post employees

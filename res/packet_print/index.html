@@ -14,12 +14,19 @@
 			padding: 3px;
 			border: 1px solid black;
 		}
+		.widgetbuttons {
+			margin-top: 10px;
+		}
+		.opbuttons {
+			float: right;
+		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
 	<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
 	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+	<script type="text/javascript" src="../../lib/external/filesaver/FileSaver.js"></script>
 	<script type="text/javascript" src="../../js/date.js"></script>
-	<script type="text/javascript" src="../../js/packetprint.js"></script>
+	<script type="text/javascript" src="packetprint.js"></script>
 	<script type="text/javascript">
 		$( function() {
 			packetPrintTabInit();
@@ -28,31 +35,37 @@
 </head>
 <body>
 <div id="packetTypeSelect" class="ui-widget">
-	<fieldset id="listTypeSet">
-		<legend>Выбрать тип отправлений</legend>
+	<fieldset id="createNewList" style="display: inline;">
+		<legend>Создать новый список</legend>
 		<label for="noNumRadio">Без номера</label>
 		<input type="radio" name="radio-1" id="noNumRadio">
 		<label for="numRadio">С номером</label>
 		<input type="radio" name="radio-1" id="numRadio">
+		<button id="selectTypeButton">Создать</button>
 	</fieldset>
-	<button id="selectTypeButton">Создать</button>
+	<fieldset id="openList" style="display: inline;">
+		<legend>Открыть список</legend>
+		<input id="file-input" type="file" name="file-input">
+		<button id="loadWaybillButton">Открыть</button>
+	</fieldset>
 </div>
 <div id="packetList">
 	<div id="inputPacketWidget" class="ui-widget">
 		<label for="scoreOutput">Количество: </label>
 		<div id="scoreOutput">0</div>
 		<label for="adrNumber" id="adrNumberLabel">Номер:</label>
-		<input type="text" id="adrNumber" size="4">
+		<input type="text" id="adrNumber" size="4" onkeydown="javascript: if (event.keyCode == 13) {document.getElementById('adrName').focus();}">
 		<label for="adrName">Имя:</label>
-		<input type="text" id="adrName">
+		<input type="text" id="adrName" size="40" onkeydown="javascript: if (event.keyCode == 13) {document.getElementById('adrAddress').focus();}">
 		<label for="adrAddress">Адрес:</label>
-		<input type="text" id="adrAddress" size="20">
+		<input type="text" id="adrAddress" size="30" onkeydown="javascript: if (event.keyCode == 13) {document.getElementById('addPacketButton').focus();}">
 		<br>
-		<button id="addPacketButton">Добавить</button>
-		<button id="printPacketButton">Сохранить/печать</button>
+		<button id="addPacketButton" class="widgetbuttons">Добавить</button>
+		<button id="printPacketButton" class="widgetbuttons">Печать</button>
+		<button id="saveWaybillButton" class="widgetbuttons">Сохранить</button>
 	</div>
 	<div class="ui-widget">
-		<div style="overflow-y: scroll; height: 300px; margin-top: 10px;">
+		<div style="overflow-y: scroll; height: 390px; margin-top: 10px;">
 			<table id="adrList">
 				<tr>
 					<th>Вх. №</th>
