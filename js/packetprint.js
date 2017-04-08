@@ -6,7 +6,7 @@ function addElement() {
 
 	var now = new Date();
 
-	var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>164522</b></div><br>ОПС<br><div class=\"postname\">СЕВЕРОДВИНСК 22</div></div>";
+	var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>~index~</b></div><br>ОПС<br><div class=\"postname\">~postname~</div></div>";
 
 	adrList.push(
 		[
@@ -105,12 +105,6 @@ function packetPrintTabInit() {
 	$("#packetList").hide();
 
 	var availableStreets = [
-		"Ломоносова",
-		"Коновалова",
-		"Трухинова",
-		"Строителей",
-		"Карла Маркса",
-		"Советских Космонавтов"
 	];
 
 	$( "input[type='radio']" ).checkboxradio();
