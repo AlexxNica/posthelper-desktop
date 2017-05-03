@@ -3,6 +3,8 @@ var availableNames = [];
 
 function dbTestInit() {
 
+	$("#inputDBWidget").hide();
+
 	$("#createDBButton").button();
 	$("#createDBButton").click(function (event) {
 		openDB();
@@ -45,6 +47,7 @@ function openDB() {
 		);
 	});
 	alert("Database loaded");
+	$("#inputDBWidget").show();
 }
 
 function tableInit() {

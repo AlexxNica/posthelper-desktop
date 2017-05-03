@@ -1,0 +1,18 @@
+body {
+    font-family: sans-serif;
+}
+.center {
+    text-align: center;
+}
+.italic {
+    font-style: italic;
+}
+.libs {
+    font-size: 9pt;
+    width: 300px;
+    margin: auto;
+}
+.copyright {
+    text-align: center;
+    padding-top: 23px;
+}

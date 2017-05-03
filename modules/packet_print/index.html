@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PostHelper - Packet Print</title>
+    <style type="text/css">
+        .form { display:block; }
+        .fieldset-form {
+            padding:0; 
+            border:0;
+            margin-top:25px;
+        }
+        input.text { 
+            margin-top: 10px;
+            margin-bottom:10px; 
+            width:95%; 
+            padding: .4em; 
+        }
+        input.type {
+            margin-top: 10px;
+            padding: 3px;
+        }
+        span {
+            font-family: monospace;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td, th {
+            padding: 3px;
+            border: 1px solid black;
+        }
+        .widgetbuttons {
+            margin-top: 10px;
+        }
+        .opbuttons {
+            float: right;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+    <script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="../../lib/external/colresizable/colResizable.js"></script>
+    <script type="text/javascript" src="../../lib/external/filesaver/FileSaver.js"></script>
+    <script type="text/javascript" src="../../shared/date.js"></script>
+    <script type="text/javascript" src="packetprint.js"></script>
+    <script type="text/javascript">
+        $( function() {
+            $("#tableField").css('height', (window.innerHeight - 130)+'px');
+            $(window).resize(function() {
+                $("#tableField").css('height', (window.innerHeight - 130)+'px');
+            });
+            packetPrintTabInit();
+        });
+    </script>
+</head>
+<body>
+<div id="packetTypeSelect" class="ui-widget">
+    <fieldset id="createNewList" style="display: inline;">
+        <legend>Создать новый список</legend>
+            <label for="noNumRadio">Без номера</label>
+            <input type="radio" name="radio-1" id="noNumRadio">
+            <label for="numRadio">С номером</label>
+            <input type="radio" name="radio-1" id="numRadio">
+            <button id="selectTypeButton">Создать</button>
+	</fieldset>
+    <fieldset id="openList" style="display: inline;">
+        <legend>Открыть список</legend>
+        <input id="file-input" type="file" name="file-input">
+        <button id="loadWaybillButton">Открыть</button>
+    </fieldset>
+</div>
+<div id="packetList">
+    <div id="inputPacketWidget" class="ui-widget">
+        <div style="display: inline;">Количество: </div>
+        <div id="scoreOutput" style="display: inline;">0</div>
+        <br>
+        <label for="adrLetter" id="adrNumberLabel">Номер:</label>
+        <input type="text" id="adrLetter" size="1" class='type ui-widget-content ui-corner-all'>
+        <input type="text" id="adrNumber" size="4" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrName').focus();}" class='type ui-widget-content ui-corner-all'>
+        <label for="adrName">Имя:</label>
+        <input type="text" id="adrName" size="40" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddress').focus(); selectAddress($('#adrName').val());}" class='type ui-widget-content ui-corner-all'>
+        <label for="adrAddress">Адрес:</label>
+        <input type="text" id="adrAddress" size="30" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('addPacketButton').focus();}" class='type ui-widget-content ui-corner-all'>
+        <br>
+        <button id="addPacketButton" class="widgetbuttons">Добавить</button>
+        <button id="printPacketButton" class="widgetbuttons">Печать</button>
+        <button id="saveWaybillButton" class="widgetbuttons">Сохранить</button>
+    </div>
+<!--<div class="ui-widget">
+        <div id="tableField" style="overflow-y: scroll; height: 100%; margin-top: 10px;" class="ui-widget">
+            <table id="adrList" class="ui-widget ui-widget-content">
+                <tr class="ui-widget-header">
+                    <th>Вх. №</th>
+                    <th width="300px">Имя получателя</th>
+                    <th>Адрес получателя</th>
+                </tr>
+            </table>
+        </div>
+    </div>-->
+    <div class="ui-widget">
+        <div id="tableField" style="overflow-y: scroll; height: 100%; margin-top: 10px;" class="ui-widget">
+            <table id="adrList" class="ui-widget ui-widget-content" width="100%">
+                <tr class="ui-widget-header">
+                    <th width="10%">Вх. №</th>
+                    <th width="60%">Имя получателя</th>
+                    <th width="30%">Адрес получателя</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="editDialog" title="Редактирование">
+        <fieldset class="fieldset-form">
+            <label for="name" class="form">Имя</label>
+            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
+            <label for="address" class="form">Адрес</label>
+            <input type="text" name="address" id="address" class="text ui-widget-content ui-corner-all">
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </div>
+</div>
+</body>
+</html>

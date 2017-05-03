@@ -18,7 +18,7 @@ function phoneCodesTabInit() {
 
     $("#findCodeButton").button();
     $("#findCodeButton").click(function (event) {
-        $("#carrierOutput").html(getCarrier(inputCode));
+        $("#carrierOutput").html(getCarrier($("#codeInput").val()));
     });
 
 	var availableCodes = [

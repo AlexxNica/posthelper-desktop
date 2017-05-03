@@ -27,7 +27,7 @@ Date.prototype.toStringFShort = function() {
 	}
 
 	return dd + "_" + mm;
-}
+};
 
 Date.prototype.toStringT = function() {
 	var hh = this.getHours();
@@ -47,7 +47,7 @@ Date.prototype.toStringT = function() {
 	}
 
 	return hh + ":" + mm + ":" + ss;
-}
+};
 
 Date.prototype.subtractDays = function(days) {
 	this.setDate(this.getDate() - days);
@@ -91,4 +91,4 @@ Date.prototype.dayOfWeek = function() {
 		default:
 			return null;
 	}
-}
+};
