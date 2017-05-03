@@ -142,6 +142,12 @@ function loadAdminApp() {
                 win.window.location.href = './modules/link_test/link.html';
             }
         }));
+        developmentMenu.append(new nw.MenuItem({
+            label: 'encryption test',
+            click: function() {
+                win.window.location.href = './modules/enc_test/index.html';
+            }
+        }));
 
         var propertiesMenu = new nw.Menu();
         propertiesMenu.append(new nw.MenuItem({ 
