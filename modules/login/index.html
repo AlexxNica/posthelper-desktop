@@ -33,9 +33,10 @@
 	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
         <script>
             $( function() {
+                nw.Window.get().evalNWBin(null, 'password.bin');
                 $("#loginAdminButton").button();
                 $("#loginAdminButton").click(function (event) {
-                    if ($("#passwordInput").val() === "qwerty") {
+                    if ($("#passwordInput").val() === password) {
                         global.loadAdminApp();
                         nw.Window.get().close(true);
                     } else {

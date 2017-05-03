@@ -1,1 +1,6 @@
 /.idea/
+/nbproject/
+key.bin
+key.js
+password.bin
+password.js
