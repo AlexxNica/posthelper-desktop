@@ -1,7 +1,10 @@
 /* global nw */
 
+var config; // configuration file object
 var db; // database object
 var adrList = []; // array contains packets
+var addressString; // field for address
+var availableStreets; // array for street autocomplete
 var availableNames = []; // array for name autocomplete
 var count = 0; // counter of packets in the waybil
 var isInDB = false; // flag for checking name db selection
@@ -17,8 +20,16 @@ function selectAddress(name) {
             function (tx, results) {
                 //alert(results.rows.item(0).address);
                 try {
-                    $("#adrAddress").val(results.rows.item(0).address);
+                    var address = results.rows.item(0).address.match(/[\wа-я]+/gi);
+                    $("#adrAddressStreet").val(address[0]);
+                    $("#adrAddressBuilding").val(address[1]);
+                    $("#adrAddressApartment").val(address[2]);
                     isInDB = true;
+                    if (isInDB) {
+                        document.getElementById("adrAddressApartment").focus();
+                    } else {
+                        document.getElementById("adrAddressStreet").focus();
+                    }
                 }
                 catch (e) {
                     isInDB = false;
@@ -29,8 +40,25 @@ function selectAddress(name) {
     });
 }
 
+function printBlank() {
+    var now = new Date();
+    var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + config.postcode + "</b></div><br>ОПС<br><div class=\"postname\">" + config.postname + "</div></div>";
+    for (var i = 0; i <= 3; ++i) {
+        adrList.push(["","_____________________","______________", stampCode]);
+    }
+    sendData();
+}
+
+function compileAddress() {
+    addressString = 
+        $("#adrAddressStreet").val() + " " +
+        $("#adrAddressBuilding").val() + "-" +
+        $("#adrAddressApartment").val()
+    ;
+}
+
 function addElement() {
-    
+
     $("table").colResizable();
     
     // check for count limit
@@ -39,16 +67,17 @@ function addElement() {
         alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
         return;
     }
+    
+    compileAddress();
 
     // check for dd
 
-    if (isInDB === false) {
+    if (!isInDB) {
         var name = $("#adrName").val().split(' ').map(function(el) {return el.charAt(0).toUpperCase() + el.slice(1);}).join(' ');
-        var address = $("#adrAddress").val();
         db.transaction( function (tx) {
             tx.executeSql(
                 'INSERT INTO addresses (name, address) VALUES (?,?)',
-                [name, address]
+                [name, addressString]
             );
         });
     }
@@ -57,13 +86,13 @@ function addElement() {
 
     var now = new Date();
 
-    var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>~индекс~</b></div><br>ОПС<br><div class=\"postname\">~опс~</div></div>";
+    var stampCode = stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + config.postcode + "</b></div><br>ОПС<br><div class=\"postname\">" + config.postname + "</div></div>";
 
     adrList.push(
         [
             $("#adrLetter").val() + $("#adrNumber").val(), 
             $("#adrName").val().split(' ').map(function(el) {return el.charAt(0).toUpperCase() + el.slice(1);}).join(' '),
-            $("#adrAddress").val(),
+            addressString,
             stampCode
         ]
     );
@@ -92,7 +121,9 @@ function addElement() {
         $("#adrNumber").val("");
     }
     $("#adrName").val("");
-    $("#adrAddress").val("");
+    $("#adrAddressStreet").val("");
+    $("#adrAddressBuilding").val("");
+    $("#adrAddressApartment").val("");
 
     isInDB = false;
 }
@@ -165,19 +196,32 @@ function rebuildTable() {
             "</td></tr>"
         );
     }
+    $("table").colResizable();
 }
 
 function editPacket(number) {
     numberToEdit = number;
     editDialog.dialog("open");
-    $("#name").val(adrList[number][1]);
-    $("#address").val(adrList[number][2]);
+    $("#nameEdit").val(adrList[number][1]);
+    $("#addressEdit").val(adrList[number][2]);
 }
 
 function packetPrintTabInit() {
     
     // hide table before waybill is created
     $("#packetList").hide();
+
+    // config loading
+    $.getJSON("../../res/config.json", function(data) {
+        config = data;
+        availableStreets = config.streets;
+        $("#adrAddressStreet").autocomplete({
+            source: availableStreets
+        });
+    })
+    .fail(function(){
+        alert("Ошибка загрузки файла конфигурации");
+    });
 
     // db loading
     availableNames.splice(0, availableNames.length);
@@ -194,9 +238,6 @@ function packetPrintTabInit() {
         );
     });
     console.log("Database loaded");
-
-    var availableStreets = [
-    ];
 
     // set ediiting dialog properties
     editDialog = $("#editDialog").dialog({
@@ -215,8 +256,8 @@ function packetPrintTabInit() {
                 }
             },
             Сохранить: function() {
-                adrList[numberToEdit][1] = $("#name").val();
-                adrList[numberToEdit][2] = $("#address").val();
+                adrList[numberToEdit][1] = $("#nameEdit").val();
+                adrList[numberToEdit][2] = $("#addressEdit").val();
                 rebuildTable();
                 editDialog.dialog("close");
             },
@@ -252,13 +293,10 @@ function packetPrintTabInit() {
         }
     });
 
-    $("#adrAddress").autocomplete({
-        source: availableStreets
-    });
-
     $("#addPacketButton").button();
     $("#addPacketButton").click(function (event) {
-        if (confirm("Добавить данное вложение?\n" + $("#adrName").val() + "\n" + $("#adrAddress").val())) {
+        compileAddress();
+        if (confirm("Добавить данное вложение?\n" + $("#adrName").val() + "\n" + addressString)) {
             addElement();
         }
     });
@@ -272,4 +310,9 @@ function packetPrintTabInit() {
     $("#saveWaybillButton").click(function (event) {
     	saveWaybill();
     });
+
+    $("#printBlank").button();
+    $("#printBlank").click(function (event) {
+        printBlank();
+    })
 }

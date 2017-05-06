@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>encrypting test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+        <style type="text/css">
+        	body {
+        		font-family: sans-serif;
+        	}
+        </style>
+		<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+		<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+        <script type="text/javascript" src="mstk.js"></script>
+        <script type="text/javascript">
+		$( function() {
+            mstkInit();
+		});
+	</script>
+    </head>
+    <body>
+    <div id="checkAddressWidget" class="ui-widget">
+    	<label for="adrAddressStreet">Адрес:</label>
+        <input type="text" id="adrAddressStreet" size="30" placeholder="Улица" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddressBuilding').focus();}" class='type ui-widget-content ui-corner-all'>
+        <input type="text" id="adrAddressBuilding" size="4" placeholder="Дом" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddressApartment').focus();}" class='type ui-widget-content ui-corner-all'>
+        <input type="text" id="adrAddressApartment" size="4" placeholder="Кв." onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('checkAddressButton').focus();}" class='type ui-widget-content ui-corner-all'>
+        <button id="checkAddressButton">Check</button>
+    </div>
+    <div id="list"></div>
+    </body>
+</html>

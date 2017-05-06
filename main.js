@@ -148,6 +148,12 @@ function loadAdminApp() {
                 win.window.location.href = './modules/enc_test/index.html';
             }
         }));
+        developmentMenu.append(new nw.MenuItem({
+            label: 'mstk test',
+            click: function() {
+                win.window.location.href = './modules/mstk_test/index.html';
+            }
+        }));
 
         var propertiesMenu = new nw.Menu();
         propertiesMenu.append(new nw.MenuItem({ 

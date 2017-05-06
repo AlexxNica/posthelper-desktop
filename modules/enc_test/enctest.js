@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* global CryptoJS */
+/* global CryptoJS, nw, key */
 
 var db;
 var availableNames = [];
@@ -43,7 +43,7 @@ function dbTestInit() {
     $("#dialog").dialog({
         autoOpen: false,
         closeOnEscape: false,
-        resizable: false,
+        resizable: false
     });
 
     $("#progressbar").progressbar({

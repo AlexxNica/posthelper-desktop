@@ -1,5 +1,6 @@
 /.idea/
 /nbproject/
+/res/config.json
 key.bin
 key.js
 password.bin
