@@ -1,4 +1,11 @@
 /* global nw */
+var fs = require('fs');
+try {
+    var configFile = fs.readFileSync("res/config.json");
+    var config = JSON.parse(configFile);
+} catch (e) {
+    alert("Ошибка: не найден файл конфигурации\n");
+}
 
 nw.Window.open('modules/login/index.html');
 

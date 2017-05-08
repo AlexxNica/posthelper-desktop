@@ -1,6 +1,5 @@
 /* global nw */
 
-var config; // configuration file object
 var db; // database object
 var adrList = []; // array contains packets
 var addressString; // field for address
@@ -42,7 +41,7 @@ function selectAddress(name) {
 
 function printBlank() {
     var now = new Date();
-    var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + config.postcode + "</b></div><br>ОПС<br><div class=\"postname\">" + config.postname + "</div></div>";
+    var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + global.config.postCode + "</b></div><br>ОПС<br><div class=\"postname\">" + global.config.postName + "</div></div>";
     for (var i = 0; i <= 3; ++i) {
         adrList.push(["","_____________________","______________", stampCode]);
     }
@@ -86,7 +85,7 @@ function addElement() {
 
     var now = new Date();
 
-    var stampCode = stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + config.postcode + "</b></div><br>ОПС<br><div class=\"postname\">" + config.postname + "</div></div>";
+    var stampCode = stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + global.config.postCode + "</b></div><br>ОПС<br><div class=\"postname\">" + global.config.postName + "</div></div>";
 
     adrList.push(
         [
@@ -212,7 +211,7 @@ function packetPrintTabInit() {
     $("#packetList").hide();
 
     // config loading
-    $.getJSON("../../res/config.json", function(data) {
+    /*$.getJSON("../../res/config.json", function(data) {
         config = data;
         availableStreets = config.streets;
         $("#adrAddressStreet").autocomplete({
@@ -221,7 +220,8 @@ function packetPrintTabInit() {
     })
     .fail(function(){
         alert("Ошибка загрузки файла конфигурации");
-    });
+    });*/
+    availableStreets = global.config.streets;
 
     // db loading
     availableNames.splice(0, availableNames.length);
@@ -291,6 +291,10 @@ function packetPrintTabInit() {
             var results = $.ui.autocomplete.filter(availableNames, request.term);
             response(results.slice(0, 10));
         }
+    });
+
+    $("#adrAddressStreet").autocomplete({
+        source: availableStreets
     });
 
     $("#addPacketButton").button();
