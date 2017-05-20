@@ -1,64 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>PostHelper - Login</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
-        <style>
-            input.type {
-                padding: 3px;
-            }
-            .form {
-                width: 290px;
-                height: 100px;
-                position:absolute; /*it can be fixed too*/
-	            left:0; right:0;
-	            top:0; bottom:0;
-	            margin:auto;
-            }
-            .disclaimer {
-                position: absolute;
-                bottom: 30px;
-                font-family: sans-serif;
-                font-size: 14px;
-                width: 90%;
-                left: 0;
-                right: 0;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        </style>
-	<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
-	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
-        <script>
-            $( function() {
-                nw.Window.get().evalNWBin(null, 'password.bin');
-                $("#loginAdminButton").button();
-                $("#loginAdminButton").click(function (event) {
-                    if ($("#passwordInput").val() === password) {
-                        global.loadAdminApp();
-                        nw.Window.get().close(true);
-                    } else {
-                        alert("Неправильный пароль");
-                    }
-                });
-                $("#loginButton").button();
-                $("#loginButton").click(function (event) {
-                    global.loadApp();
-                    nw.Window.get().close(true);
-                });
-            });
-        </script>
-    </head>
-    <body>
-        <div class="form ui-widget">
-            <p>Введите пароль:</p>
-            <input type="password" id="passwordInput" class="type ui-widget-content ui-corner-all">
-            <button id="loginAdminButton">Войти</button>
-            <br>
-            <button id="loginButton">Войти с ограниченными правами</button>
-        </div>
-        <div class="disclaimer"><b>Внимание!</b> Данное ПО находится в разработке и может работать нестабильно. Обо всех обнаруженных ошибках просьба сообщать автору программы, однако автор <i>не несет ответственности</i> за их своевременное исправление.</div>
-    </body>
+  <head>
+    <title>PostHelper - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="layout.css">
+    <script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        nw.Window.get().evalNWBin(null, 'password.bin');
+        $("#loginAdminButton").button();
+        $("#loginAdminButton").click(function (event) {
+          if ($("#passwordInput").val() === password) {
+            global.loadAdminApp();
+            nw.Window.get().close(true);
+          } else {
+            alert("Неправильный пароль");
+          }
+        });
+        $("#loginButton").button();
+        $("#loginButton").click(function (event) {
+          global.loadApp();
+          nw.Window.get().close(true);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="form ui-widget">
+      <button id="loginButton">Войти как пользователь</button>
+      <p class="center or"><i>или</i></p>
+      <p>Введите пароль администратора:</p>
+      <input type="password" id="passwordInput" class="type ui-widget-content ui-corner-all">
+      <button id="loginAdminButton">Войти</button>
+    </div>
+    <div class="disclaimer">
+      <b>Внимание!</b> Данное ПО находится в разработке и может работать нестабильно.
+      Обо всех обнаруженных ошибках просьба сообщать автору программы, однако автор
+      <i>не несет ответственности</i> за их своевременное исправление.
+    </div>
+  </body>
 </html>

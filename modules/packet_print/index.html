@@ -1,140 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>PostHelper - Packet Print</title>
-    <style type="text/css">
-        .form { display:block; }
-        .fieldset-form {
-            padding:0; 
-            border:0;
-            margin-top:25px;
-        }
-        input.text { 
-            margin-top: 10px;
-            margin-bottom:10px; 
-            width:95%; 
-            padding: .4em; 
-        }
-        input.type {
-            margin-top: 10px;
-            padding: 3px;
-        }
-        span {
-            font-family: monospace;
-        }
-        table {
-            border-collapse: collapse;
-        }
-        td, th {
-            padding: 3px;
-            border: 1px solid black;
-        }
-        .widgetbuttons {
-            margin-top: 10px;
-        }
-        .opbuttons {
-            float: right;
-        }
-    </style>
-    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
-    <script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
-    <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
-    <script type="text/javascript" src="../../lib/external/colresizable/colResizable.js"></script>
-    <script type="text/javascript" src="../../lib/external/filesaver/FileSaver.js"></script>
-    <script type="text/javascript" src="../../shared/date.js"></script>
-    <script type="text/javascript" src="packetprint.js"></script>
-    <script type="text/javascript">
-        $( function() {
-            $("#tableField").css('height', (window.innerHeight - 130)+'px');
-            $(window).resize(function() {
-                $("#tableField").css('height', (window.innerHeight - 130)+'px');
-            });
-            packetPrintTabInit();
-        });
-    </script>
-    <script>
-        function changeField() {
-            if (event.keyCode === 13) {
-                selectAddress($('#adrName').val());
-                if (isInDB) {
-                    document.getElementById("adrAddressApartment").focus();
-                } else {
-                    document.getElementById("adrAddressStreet").focus();
-                }
-            }
-        }
-    </script>
+  <meta charset="utf-8">
+  <title>PostHelper - Packet Print</title>
+  <link rel="stylesheet" type="text/css" href="index_layout.css">
+  <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+  <script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+  <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../lib/external/colresizable/colResizable.js"></script>
+  <script type="text/javascript" src="../../lib/external/filesaver/FileSaver.js"></script>
+  <script type="text/javascript" src="../../shared/date.js"></script>
+  <script type="text/javascript" src="packetprint.js"></script>
+  <script type="text/javascript">
+    $( function() {
+      $("#tableField").css('height', (window.innerHeight - 130)+'px');
+      $(window).resize(function() {
+        $("#tableField").css('height', (window.innerHeight - 130)+'px');
+      });
+      packetPrintTabInit();
+    });
+  </script>
+</head>
+<body>
 <div id="packetTypeSelect" class="ui-widget">
-    <fieldset id="createNewList" style="display: inline;">
-        <legend>Создать новый список</legend>
-            <label for="noNumRadio">Без номера</label>
-            <input type="radio" name="radio-1" id="noNumRadio">
-            <label for="numRadio">С номером</label>
-            <input type="radio" name="radio-1" id="numRadio">
-            <button id="selectTypeButton">Создать</button>
-	</fieldset>
-    <fieldset id="openList" style="display: inline;">
-        <legend>Открыть список</legend>
-        <input id="file-input" type="file" name="file-input">
-        <button id="loadWaybillButton">Открыть</button>
+  <fieldset id="createNewList" style="display: inline;">
+    <legend>Создать новый список</legend>
+    <label for="noNumRadio">Без номера</label>
+    <input type="radio" name="radio-1" id="noNumRadio">
+    <label for="numRadio">С номером</label>
+    <input type="radio" name="radio-1" id="numRadio">
+    <button id="selectTypeButton">Создать</button>
+  </fieldset>
+  <fieldset id="openList" style="display: inline;">
+    <legend>Открыть список</legend>
+    <input id="file-input" type="file" name="file-input">
+    <button id="loadWaybillButton">Открыть</button>
     </fieldset>
     <fieldset id="otherFunctions" style="display: inline;">
-        <legend>Другое</legend>
-        <button id="printBlank">Распечатать пустой бланк</button>
-    </fieldset>
+    <legend>Другое</legend>
+    <button id="printBlank">Распечатать пустой бланк</button>
+  </fieldset>
 </div>
 <div id="packetList">
-    <div id="inputPacketWidget" class="ui-widget">
-        <div style="display: inline;">Количество: </div>
-        <div id="scoreOutput" style="display: inline;">0</div>
-        <br>
-        <label for="adrLetter" id="adrNumberLabel">Номер:</label>
-        <input type="text" id="adrLetter" size="1" class='type ui-widget-content ui-corner-all'>
-        <input type="text" id="adrNumber" size="4" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrName').focus();}" class='type ui-widget-content ui-corner-all'>
-        <label for="adrName">Имя:</label>
-        <input type="text" id="adrName" size="40" onkeydown="javascript: changeField();" class='type ui-widget-content ui-corner-all'>
-        <label for="adrAddressStreet">Адрес:</label>
-        <input type="text" id="adrAddressStreet" size="30" placeholder="Улица" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddressBuilding').focus();}" class='type ui-widget-content ui-corner-all'>
-        <input type="text" id="adrAddressBuilding" size="4" placeholder="Дом" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddressApartment').focus();}" class='type ui-widget-content ui-corner-all'>
-        <input type="text" id="adrAddressApartment" size="4" placeholder="Кв." onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('addPacketButton').focus();}" class='type ui-widget-content ui-corner-all'>
-        <br>
-        <button id="addPacketButton" class="widgetbuttons">Добавить</button>
-        <button id="printPacketButton" class="widgetbuttons">Печать</button>
-        <button id="saveWaybillButton" class="widgetbuttons">Сохранить</button>
+  <div id="inputPacketWidget" class="ui-widget">
+    <div style="display: inline;">Количество: </div>
+    <div id="scoreOutput" style="display: inline;">0</div>
+    <br>
+    <label for="adrLetter" id="adrNumberLabel">Номер:</label>
+    <input type="text" id="adrLetter" size="1" class='type ui-widget-content ui-corner-all'>
+    <input type="text" id="adrNumber" size="4" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrName').focus();}" class='type ui-widget-content ui-corner-all'>
+    <label for="adrName">Имя:</label>
+    <input type="text" id="adrName" size="40" onkeydown="javascript: changeField(event);" class='type ui-widget-content ui-corner-all'>
+    <label for="adrAddressStreet">Адрес:</label>
+    <input type="text" id="adrAddressStreet" size="30" placeholder="Улица" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddressBuilding').focus();}" class='type ui-widget-content ui-corner-all'>
+    <input type="text" id="adrAddressBuilding" size="4" placeholder="Дом" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('adrAddressApartment').focus();}" class='type ui-widget-content ui-corner-all'>
+    <input type="text" id="adrAddressApartment" size="4" placeholder="Кв." onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('addPacketButton').focus();}" class='type ui-widget-content ui-corner-all'>
+    <br>
+    <button id="addPacketButton" class="widgetbuttons">Добавить</button>
+    <button id="printPacketButton" class="widgetbuttons">Печать</button>
+    <button id="saveWaybillButton" class="widgetbuttons">Сохранить</button>
+  </div>
+  <div class="ui-widget">
+    <div id="tableField" style="overflow-y: scroll; height: 100%; margin-top: 10px;" class="ui-widget">
+      <table id="adrList" class="ui-widget ui-widget-content" width="100%">
+        <tr class="ui-widget-header">
+          <th width="10%">Вх. №</th>
+          <th width="60%">Имя получателя</th>
+          <th width="30%">Адрес получателя</th>
+        </tr>
+      </table>
     </div>
-<!--<div class="ui-widget">
-        <div id="tableField" style="overflow-y: scroll; height: 100%; margin-top: 10px;" class="ui-widget">
-            <table id="adrList" class="ui-widget ui-widget-content">
-                <tr class="ui-widget-header">
-                    <th>Вх. №</th>
-                    <th width="300px">Имя получателя</th>
-                    <th>Адрес получателя</th>
-                </tr>
-            </table>
-        </div>
-    </div>-->
-    <div class="ui-widget">
-        <div id="tableField" style="overflow-y: scroll; height: 100%; margin-top: 10px;" class="ui-widget">
-            <table id="adrList" class="ui-widget ui-widget-content" width="100%">
-                <tr class="ui-widget-header">
-                    <th width="10%">Вх. №</th>
-                    <th width="60%">Имя получателя</th>
-                    <th width="30%">Адрес получателя</th>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div id="editDialog" title="Редактирование">
-        <fieldset class="fieldset-form">
-            <label for="name" class="form">Имя</label>
-            <input type="text" name="nameEdit" id="nameEdit" class="text ui-widget-content ui-corner-all">
-            <label for="address" class="form">Адрес</label>
-            <input type="text" name="addressEdit" id="addressEdit" class="text ui-widget-content ui-corner-all">
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </div>
+  </div>
+  <div id="editDialog" title="Редактирование">
+    <fieldset class="fieldset-form">
+      <label for="name" class="form">Имя</label>
+      <input type="text" name="nameEdit" id="nameEdit" class="text ui-widget-content ui-corner-all">
+      <label for="address" class="form">Адрес</label>
+      <input type="text" name="addressEdit" id="addressEdit" class="text ui-widget-content ui-corner-all">
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </div>
 </div>
 </body>
 </html>

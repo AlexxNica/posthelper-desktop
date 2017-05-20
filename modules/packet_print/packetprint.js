@@ -11,312 +11,350 @@ var editDialog; // object for jqueryui edit window
 var numberToEdit = 0; // element for editing
 
 function selectAddress(name) {
-    var query = 'SELECT address FROM addresses WHERE name LIKE ?';
-    db.transaction(function (tx) {
-        tx.executeSql(
-            query,
-            [name],
-            function (tx, results) {
-                //alert(results.rows.item(0).address);
-                try {
-                    var address = results.rows.item(0).address.match(/[\wа-я]+/gi);
-                    $("#adrAddressStreet").val(address[0]);
-                    $("#adrAddressBuilding").val(address[1]);
-                    $("#adrAddressApartment").val(address[2]);
-                    isInDB = true;
-                    if (isInDB) {
-                        document.getElementById("adrAddressApartment").focus();
-                    } else {
-                        document.getElementById("adrAddressStreet").focus();
-                    }
-                }
-                catch (e) {
-                    isInDB = false;
-                }
-            },
-            null
-        );
-    });
+  var query = 'SELECT address FROM addresses WHERE name LIKE ?';
+  db.transaction(function (tx) {
+    tx.executeSql(
+      query,
+      [name],
+      function (tx, results) {
+      //alert(results.rows.item(0).address);
+        try {
+          var address = results.rows.item(0).address.match(/[\wа-я]+/gi);
+          // check for two-word street name
+          if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
+            address[0] = address[0] + " " + address[1]; // compile it again
+            // shift other items
+            address[1] = address[2];
+            address[2] = address[3];
+          }
+          $("#adrAddressStreet").val(address[0]);
+          $("#adrAddressBuilding").val(address[1]);
+          $("#adrAddressApartment").val(address[2]);
+          isInDB = true;
+          if (isInDB) {
+            document.getElementById("adrAddressApartment").focus();
+          } else {
+            document.getElementById("adrAddressStreet").focus();
+          }
+        }
+        catch (e) {
+          isInDB = false;
+        }
+      },
+      null
+    );
+  });
 }
 
 function printBlank() {
-    var now = new Date();
-    var stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + global.config.postCode + "</b></div><br>ОПС<br><div class=\"postname\">" + global.config.postName + "</div></div>";
-    for (var i = 0; i <= 3; ++i) {
-        adrList.push(["","_____________________","______________", stampCode]);
-    }
-    sendData();
+  var now = new Date();
+  var stampCode = "<div class=\"stamp\">" +
+    now.toStringF() + "г.<br>" +
+    now.toStringT() +
+    "<br><div class=\"postcode\"><b>" +
+    global.config.postCode +
+    "</b></div><br>ОПС<br><div class=\"postname\">" +
+    global.config.postName +
+    "</div></div>";
+  for (var i = 0; i <= 3; ++i) {
+    adrList.push(["","_____________________","______________", stampCode]);
+  }
+  sendData();
 }
 
 function compileAddress() {
-    addressString = 
-        $("#adrAddressStreet").val() + " " +
-        $("#adrAddressBuilding").val() + "-" +
-        $("#adrAddressApartment").val()
-    ;
+  addressString =
+    $("#adrAddressStreet").val() + " " +
+    $("#adrAddressBuilding").val() + "-" +
+    $("#adrAddressApartment").val()
+  ;
 }
 
 function addElement() {
 
-    $("table").colResizable();
-    
-    // check for count limit
-    
-    if (count >= 32) {
-        alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
-        return;
-    }
-    
-    compileAddress();
+  $("table").colResizable();
 
-    // check for dd
+  // check for count limit
 
-    if (!isInDB) {
-        var name = $("#adrName").val().split(' ').map(function(el) {return el.charAt(0).toUpperCase() + el.slice(1);}).join(' ');
-        db.transaction( function (tx) {
-            tx.executeSql(
-                'INSERT INTO addresses (name, address) VALUES (?,?)',
-                [name, addressString]
-            );
-        });
-    }
+  if (count >= 32) {
+    alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
+    return;
+  }
 
-    // add new record for the list
+  compileAddress();
 
-    var now = new Date();
+  // check for dd
 
-    var stampCode = stampCode = "<div class=\"stamp\">" + now.toStringF() + "г.<br>" + now.toStringT() + "<br><div class=\"postcode\"><b>" + global.config.postCode + "</b></div><br>ОПС<br><div class=\"postname\">" + global.config.postName + "</div></div>";
+  if (!isInDB) {
+    // capitalize first letters of the name
+    var name = $("#adrName").val().split(' ').map(function(el) {
+      return el.charAt(0).toUpperCase() + el.slice(1);
+    }).join(' ');
+    db.transaction( function (tx) {
+      tx.executeSql(
+        'INSERT INTO addresses (name, address) VALUES (?,?)',
+        [name, addressString]
+      );
+    });
+  }
 
-    adrList.push(
-        [
-            $("#adrLetter").val() + $("#adrNumber").val(), 
-            $("#adrName").val().split(' ').map(function(el) {return el.charAt(0).toUpperCase() + el.slice(1);}).join(' '),
-            addressString,
-            stampCode
-        ]
-    );
+  // add new record for the list
 
-    // add it to html
-    $("#adrList").append(
-        "<tr><td>" + 
-        adrList[count][0] + "</td><td onclick=\"javascript: editPacket(" + count + ")\">" + 
-        adrList[count][1] + "</td><td>" + 
-        adrList[count][2] + 
-        "</td></tr>"
-    );
+  var now = new Date();
 
-    count++;
-    $("#scoreOutput").html(count);
-    if($("#adrNumber").is(":hidden")) {
-        $("#adrName").focus();
-    } else {
-        $("#adrNumber").focus();
-    }
+  // generate timestamp
+  var stampCode = "<div class=\"stamp\">" +
+    now.toStringF() + "г.<br>" +
+    now.toStringT() +
+    "<br><div class=\"postcode\"><b>" +
+    global.config.postCode +
+    "</b></div><br>ОПС<br><div class=\"postname\">" +
+    global.config.postName +
+    "</div></div>";
 
-    // reset val to defaults
-    if ($("#adrNumber").val() !== "") {
-        $("#adrNumber").val( parseInt($("#adrNumber").val()) + 1 );
-    } else {
-        $("#adrNumber").val("");
-    }
-    $("#adrName").val("");
-    $("#adrAddressStreet").val("");
-    $("#adrAddressBuilding").val("");
-    $("#adrAddressApartment").val("");
+  adrList.push(
+    [
+      $("#adrLetter").val() + $("#adrNumber").val(), // number (with letter)
+      $("#adrName").val().split(' ').map(function(el) { // capitalized name
+        return el.charAt(0).toUpperCase() + el.slice(1);
+      }).join(' '),
+      addressString, // address
+      stampCode // timestamp
+    ]
+  );
 
-    isInDB = false;
+  // add it to html
+  $("#adrList").append(
+    "<tr><td>" +
+    adrList[count][0] + "</td><td onclick=\"javascript: editPacket(" + count + ")\">" +
+    adrList[count][1] + "</td><td>" +
+    adrList[count][2] +
+    "</td></tr>"
+  );
+
+  count++;
+  $("#scoreOutput").html(count);
+  if($("#adrNumber").is(":hidden")) {
+    $("#adrName").focus();
+  } else {
+    $("#adrNumber").focus();
+  }
+
+  // reset val to defaults
+  if ($("#adrNumber").val() !== "") {
+    // increment item number
+    $("#adrNumber").val( parseInt($("#adrNumber").val()) + 1 );
+  } else {
+    $("#adrNumber").val("");
+  }
+  $("#adrName").val("");
+  $("#adrAddressStreet").val("");
+  $("#adrAddressBuilding").val("");
+  $("#adrAddressApartment").val("");
+
+  isInDB = false;
 }
 
 function sendData() {
-    var toPush;
-    if ($("#noNumRadio").is(":checked")) {
-        toPush = ["","_____________________","______________","<div class=\"stamp\"></div>"];
-    } else {
-        toPush = ["____","_____________________","______________","<div class=\"stamp\"></div>"];
+  var toPush; // placeholder for empty positions
+  if ($("#noNumRadio").is(":checked")) {
+    toPush = [
+      "",
+      "_____________________","______________",
+      "<div class=\"stamp\"></div>"
+    ];
+  } else {
+    toPush = [
+      "____",
+      "_____________________",
+      "______________",
+      "<div class=\"stamp\"></div>"
+    ];
+  }
+  // fill spaces in the notifications form
+  if (adrList.length % 4 !== 0) {
+    while (adrList.length % 4 !== 0) {
+      adrList.push(toPush);
     }
-    if (adrList.length % 4 !== 0) {
-        while (adrList.length % 4 !== 0) {
-            adrList.push(toPush);
-        }
-    }
-    nw.Window.open('modules/packet_print/print.html', {"width": 1366, "height": 768}, function(win) {
-        win.maximize();
-        // data is the list
-        win.window.data = adrList;
-    });
+  }
+  nw.Window.open('modules/packet_print/print.html', {"width": 1366, "height": 768}, function(win) {
+    win.maximize();
+    // data is the list
+    win.window.data = adrList;
+  });
 }
 
 function saveWaybill() {
-    var now = new Date();
-    var waybill = JSON.stringify(adrList);
-    var blob = new Blob([waybill], {type: "application/json"});
-    // name contains month and day of creating waybill
-    var filename = "packets" + now.toStringFShort() + ".json";
-    saveAs(blob, filename);
+  var now = new Date();
+  var waybill = JSON.stringify(adrList);
+  var blob = new Blob([waybill], {type: "application/json"});
+  // name contains month and day of creating waybill
+  var filename = "packets" + now.toStringFShort() + ".json";
+  saveAs(blob, filename);
 }
 
 function loadWaybill () {
-    //$('#file-input').trigger('click');
-    var file = $('#file-input').get(0).files[0];
-    if (file.name.match(/\.(txt|json)$/)) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            //console.log(reader.result);
-
-            $("#packetTypeSelect").hide();
-            $("#packetList").show();
-
-            adrList = JSON.parse(reader.result);
-            count = adrList.length;
-            rebuildTable();
-            $("#scoreOutput").html(count);
-        };
-        reader.readAsText(file);    
-    } else {
-        alert("File not supported, .txt or .json files only");
-    }
+  //$('#file-input').trigger('click');
+  var file = $('#file-input').get(0).files[0];
+  if (file.name.match(/\.(txt|json)$/)) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      //console.log(reader.result);
+      $("#packetTypeSelect").hide();
+      $("#packetList").show();
+      adrList = JSON.parse(reader.result);
+      count = adrList.length;
+      rebuildTable();
+      $("#scoreOutput").html(count);
+    };
+    reader.readAsText(file);
+  } else {
+    alert("File not supported, .txt or .json files only");
+  }
 }
 
 function rebuildTable() {
-    /*$("#adrList").html(
-       "<tr class=\"ui-widget-header\">" +
-           "<th>Вх. №</th>" +
-           "<th width=\"300px\">Имя получателя</th>" +
-           "<th>Адрес получателя</th>" +
-       "</tr>"
-    );*/
-    $('#adrList td').parent().remove();
-    for (var item = 0; item < adrList.length; ++item) {
-        $("#adrList").append(
-            "<tr><td>" + 
-            adrList[item][0] + "</td><td onclick=\"javascript: editPacket(" + item + ")\">" + 
-            adrList[item][1] + "</td><td>" + 
-            adrList[item][2] + 
-            "</td></tr>"
-        );
-    }
-    $("table").colResizable();
+  $('#adrList td').parent().remove();
+  for (var item = 0; item < adrList.length; ++item) {
+    $("#adrList").append(
+      "<tr><td>" +
+      adrList[item][0] + "</td><td onclick=\"javascript: editPacket(" + item + ")\">" +
+      adrList[item][1] + "</td><td>" +
+      adrList[item][2] +
+      "</td></tr>"
+    );
+  }
+  $("table").colResizable();
 }
 
 function editPacket(number) {
-    numberToEdit = number;
-    editDialog.dialog("open");
-    $("#nameEdit").val(adrList[number][1]);
-    $("#addressEdit").val(adrList[number][2]);
+  numberToEdit = number;
+  editDialog.dialog("open");
+  $("#nameEdit").val(adrList[number][1]);
+  $("#addressEdit").val(adrList[number][2]);
+}
+
+function changeField(event) {
+  if (event.keyCode === 13) {
+    selectAddress($('#adrName').val());
+    if (isInDB) {
+      document.getElementById("adrAddressApartment").focus();
+    } else {
+      document.getElementById("adrAddressStreet").focus();
+    }
+  }
 }
 
 function packetPrintTabInit() {
-    
-    // hide table before waybill is created
-    $("#packetList").hide();
 
-    // config loading
-    /*$.getJSON("../../res/config.json", function(data) {
-        config = data;
-        availableStreets = config.streets;
-        $("#adrAddressStreet").autocomplete({
-            source: availableStreets
-        });
-    })
-    .fail(function(){
-        alert("Ошибка загрузки файла конфигурации");
-    });*/
-    availableStreets = global.config.streets;
+  // hide table before waybill is created
+  $("#packetList").hide();
 
-    // db loading
-    availableNames.splice(0, availableNames.length);
-    db = openDatabase('addressDB', '0.1', 'adresses', 1024 * 1024);
-    db.transaction(function (tx) {
-        tx.executeSql(
-            'SELECT name FROM addresses',
-            [],
-            function(tx, results) {
-                for (var i = 0; i < results.rows.length; ++i) {
-                    availableNames.push(results.rows.item(i).name);
-                }
-            }
-        );
-    });
-    console.log("Database loaded");
+  // config loading
+  availableStreets = global.config.streets;
 
-    // set ediiting dialog properties
-    editDialog = $("#editDialog").dialog({
-        autoOpen: false,
-        height: 400,
-        width: 350,
-        modal: true,
-        buttons: {
-            Удалить: function () {
-                if (confirm("Вы действительно хотите удалить данную позицию?")) {
-                    adrList.splice(numberToEdit, 1);
-                    count = adrList.length;
-                    rebuildTable();
-                    $("#scoreOutput").html(count);
-                    editDialog.dialog("close");
-                }
-            },
-            Сохранить: function() {
-                adrList[numberToEdit][1] = $("#nameEdit").val();
-                adrList[numberToEdit][2] = $("#addressEdit").val();
-                rebuildTable();
-                editDialog.dialog("close");
-            },
-            Отмена: function() {
-                editDialog.dialog( "close" );
-            }
+  // db loading
+  availableNames.splice(0, availableNames.length);
+  db = openDatabase('addressDB', '0.1', 'adresses', 1024 * 1024);
+  db.transaction(function (tx) {
+    tx.executeSql(
+      'SELECT name FROM addresses',
+      [],
+      function(tx, results) {
+        for (var i = 0; i < results.rows.length; ++i) {
+          availableNames.push(results.rows.item(i).name);
         }
-    });
+      }
+    );
+  });
+  console.log("Database loaded");
 
-    // initialize interface elements
-    $( "input[type='radio']" ).checkboxradio();
-
-    $("#selectTypeButton").button();
-    $("#selectTypeButton").click(function (event) {
-        $("#packetTypeSelect").hide();
-        if ($("#noNumRadio").is(":checked")) {
-            $("#adrNumberLabel").hide();
-            $("#adrLetter").hide();
-            $("#adrNumber").hide();
+  // set ediiting dialog properties
+  editDialog = $("#editDialog").dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    buttons: {
+      Удалить: function () {
+        if (confirm("Вы действительно хотите удалить данную позицию?")) {
+          adrList.splice(numberToEdit, 1);
+          count = adrList.length;
+          rebuildTable();
+          $("#scoreOutput").html(count);
+          editDialog.dialog("close");
         }
-        $("#packetList").show();
-    });
+      },
+      Сохранить: function() {
+        adrList[numberToEdit][1] = $("#nameEdit").val();
+        adrList[numberToEdit][2] = $("#addressEdit").val();
+        rebuildTable();
+        editDialog.dialog("close");
+      },
+      Отмена: function() {
+        editDialog.dialog( "close" );
+      }
+    }
+  });
 
-    $("#loadWaybillButton").button();
-    $("#loadWaybillButton").click(function (event) {
-        loadWaybill();
-    });
+  // initialize interface elements
+  $( "input[type='radio']" ).checkboxradio();
 
-    $("#adrName").autocomplete({
-        source: function(request, response) {
-            var results = $.ui.autocomplete.filter(availableNames, request.term);
-            response(results.slice(0, 10));
-        }
-    });
+  $("#selectTypeButton").button();
+  $("#selectTypeButton").click(function (event) {
+    $("#packetTypeSelect").hide();
+    if ($("#noNumRadio").is(":checked")) {
+      $("#adrNumberLabel").hide();
+      $("#adrLetter").hide();
+      $("#adrNumber").hide();
+    }
+    $("#packetList").show();
+  });
 
-    $("#adrAddressStreet").autocomplete({
-        source: availableStreets
-    });
+  $("#loadWaybillButton").button();
+  $("#loadWaybillButton").click(function (event) {
+    loadWaybill();
+  });
 
-    $("#addPacketButton").button();
-    $("#addPacketButton").click(function (event) {
+  $("#adrName").autocomplete({
+    source: function(request, response) {
+      var results = $.ui.autocomplete.filter(availableNames, request.term);
+      response(results.slice(0, 10));
+    }
+  });
+
+  $("#adrAddressStreet").autocomplete({
+    source: availableStreets
+  });
+
+  $("#addPacketButton").button();
+  $("#addPacketButton").click(function (event) {
+    try {
+      if (global.config.area[$("#adrAddressStreet").val()][$("#adrAddressBuilding").val()] !== undefined) {
         compileAddress();
         if (confirm("Добавить данное вложение?\n" + $("#adrName").val() + "\n" + addressString)) {
-            addElement();
+          addElement();
         }
-    });
-    
-    $("#printPacketButton").button();
-    $("#printPacketButton").click(function (event) {
-        sendData();
-    });
+      } else {
+        alert("Данный адрес не входит в участок отделения");
+      }
+    } catch (e) {
+      alert("Данный адрес не входит в участок отделения");
+    }
+  });
 
-    $("#saveWaybillButton").button();
-    $("#saveWaybillButton").click(function (event) {
-    	saveWaybill();
-    });
+  $("#printPacketButton").button();
+  $("#printPacketButton").click(function (event) {
+    sendData();
+  });
 
-    $("#printBlank").button();
-    $("#printBlank").click(function (event) {
-        printBlank();
-    })
+  $("#saveWaybillButton").button();
+  $("#saveWaybillButton").click(function (event) {
+  	saveWaybill();
+  });
+
+  $("#printBlank").button();
+  $("#printBlank").click(function (event) {
+    printBlank();
+  })
 }

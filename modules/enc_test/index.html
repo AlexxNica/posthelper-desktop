@@ -5,38 +5,38 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-    <head>
-        <title>encrypting test</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
-	<script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
-	<script type="text/javascript" src="../../lib/jquery-ui.js"></script>
-        <script type="text/javascript" src="../../lib/external/cryptojs/crypto-js.js"></script>
-        <script type="text/javascript" src="enctest.js"></script>
-        <script type="text/javascript">
-		$( function() {
-                    dbTestInit();
-		});
-	</script>
-    </head>
-    <body>
-    <div id="dbTestWidget" class="ui-widget">
-		<button id="createDBButton">Open/Reload DB</button>
-	</div>
-	<div id="inputDBWidget" class="ui-widget">
-		<button id="initTableButton" style="margin-top: 10px; margin-bottom: 10px;">Init Table</button>
-		<br>
-		<label for="dbName">Name:</label>
-		<input type="text" id="dbName" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('dbAddress').focus(); selectAddress($('#dbName').val());}">
-		<label for="dbAddress">Address</label>
-		<input type="text" id="dbAddress">
-		<button id="commitToDB">Commit</button>
-		<button id="selectFromDB">Select</button>
-	</div>
-	<div id="dialog" title="Loading">
-  		<div class="progress-label">Loading DB...</div>
-  		<div id="progressbar"></div>
-	</div>
-    </body>
+<head>
+  <title>encrypting test</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+  <script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+  <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../lib/external/cryptojs/crypto-js.js"></script>
+  <script type="text/javascript" src="enctest.js"></script>
+  <script type="text/javascript">
+    $( function() {
+      dbTestInit();
+    });
+  </script>
+</head>
+<body>
+<div id="dbTestWidget" class="ui-widget">
+  <button id="createDBButton">Open/Reload DB</button>
+</div>
+<div id="inputDBWidget" class="ui-widget">
+  <button id="initTableButton" style="margin-top: 10px; margin-bottom: 10px;">Init Table</button>
+  <br>
+  <label for="dbName">Name:</label>
+  <input type="text" id="dbName" onkeydown="javascript: if (event.keyCode === 13) {document.getElementById('dbAddress').focus(); selectAddress($('#dbName').val());}">
+  <label for="dbAddress">Address</label>
+  <input type="text" id="dbAddress">
+  <button id="commitToDB">Commit</button>
+  <button id="selectFromDB">Select</button>
+</div>
+<div id="dialog" title="Loading">
+  <div class="progress-label">Loading DB...</div>
+  <div id="progressbar"></div>
+</div>
+</body>
 </html>
