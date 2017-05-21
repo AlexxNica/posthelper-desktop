@@ -11,8 +11,7 @@ var addressList = {
 };
 
 function mstkInit() {
-  $("#checkAddressButton").button();
-  $("#checkAddressButton").click(function (event) {
+  $("#checkAddressButton").button().click(function (event) {
     checkAddress();
   });
   $("#list").html(JSON.stringify(addressList));

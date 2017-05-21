@@ -11,8 +11,7 @@
     <script>
       $( function() {
         nw.Window.get().evalNWBin(null, 'password.bin');
-        $("#loginAdminButton").button();
-        $("#loginAdminButton").click(function (event) {
+        $("#loginAdminButton").button().click(function (event) {
           if ($("#passwordInput").val() === password) {
             global.loadAdminApp();
             nw.Window.get().close(true);
@@ -20,8 +19,7 @@
             alert("Неправильный пароль");
           }
         });
-        $("#loginButton").button();
-        $("#loginButton").click(function (event) {
+        $("#loginButton").button().click(function (event) {
           global.loadApp();
           nw.Window.get().close(true);
         });

@@ -13,11 +13,9 @@ function phoneCodesTabInit() {
   })
   .fail(function(){
     $("#inputCodeWidget").html("<i>Ошибка загрузки базы данных</i>");
-    return;
   });
 
-  $("#findCodeButton").button();
-  $("#findCodeButton").click(function (event) {
+  $("#findCodeButton").button().click(function (event) {
     $("#carrierOutput").html(getCarrier($("#codeInput").val()));
   });
 

@@ -14,25 +14,21 @@ function dbTestInit() {
   $("#dbTestWidget").hide();
   $("#inputDBWidget").hide();
 
-  $("#createDBButton").button();
-  $("#createDBButton").click(function (event) {
+  $("#createDBButton").button().click(function (event) {
     openDB();
   });
 
-  $("#initTableButton").button();
-  $("#initTableButton").click( function (event) {
+  $("#initTableButton").button().click( function (event) {
     if (confirm("Are you sure you want to init main table?")) {
       tableInit();
     }
   });
 
-  $("#commitToDB").button();
-  $("#commitToDB").click( function (event) {
+  $("#commitToDB").button().click( function (event) {
     commitAddress();
   });
 
-  $("#selectFromDB").button();
-  $("#selectFromDB").click( function (event) {
+  $("#selectFromDB").button().click( function (event) {
     selectAddress($("#dbName").val());
   });
 
