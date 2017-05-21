@@ -1,4 +1,8 @@
 /* global nw */
+/** @namespace nw.Window */
+/** @namespace global.config */
+/** @namespace global.config.postCode */
+/** @namespace global.config.postName */
 
 var db; // database object
 var adrList = []; // array contains packets
@@ -9,6 +13,17 @@ var count = 0; // counter of packets in the waybil
 var isInDB = false; // flag for checking name db selection
 var editDialog; // object for jqueryui edit window
 var numberToEdit = 0; // element for editing
+
+// input fields
+var adrLetterInput;
+var adrNumberInput;
+var adrNameInput;
+var adrAddressStreetInput;
+var adrAddressBuildingInput;
+var adrAddressApartmentInput;
+
+// list
+var adrListDocument;
 
 function selectAddress(name) {
   var query = 'SELECT address FROM addresses WHERE name LIKE ?';
@@ -27,9 +42,9 @@ function selectAddress(name) {
             address[1] = address[2];
             address[2] = address[3];
           }
-          $("#adrAddressStreet").val(address[0]);
-          $("#adrAddressBuilding").val(address[1]);
-          $("#adrAddressApartment").val(address[2]);
+          adrAddressStreetInput.val(address[0]);
+          adrAddressBuildingInput.val(address[1]);
+          adrAddressApartmentInput.val(address[2]);
           isInDB = true;
           if (isInDB) {
             document.getElementById("adrAddressApartment").focus();
@@ -64,9 +79,9 @@ function printBlank() {
 
 function compileAddress() {
   addressString =
-    $("#adrAddressStreet").val() + " " +
-    $("#adrAddressBuilding").val() + "-" +
-    $("#adrAddressApartment").val()
+    adrAddressStreetInput.val() + " " +
+    adrAddressBuildingInput.val() + "-" +
+    adrAddressApartmentInput.val()
   ;
 }
 
@@ -87,7 +102,7 @@ function addElement() {
 
   if (!isInDB) {
     // capitalize first letters of the name
-    var name = $("#adrName").val().split(' ').map(function(el) {
+    var name = adrNameInput.val().split(' ').map(function(el) {
       return el.charAt(0).toUpperCase() + el.slice(1);
     }).join(' ');
     db.transaction( function (tx) {
@@ -114,8 +129,8 @@ function addElement() {
 
   adrList.push(
     [
-      $("#adrLetter").val() + $("#adrNumber").val(), // number (with letter)
-      $("#adrName").val().split(' ').map(function(el) { // capitalized name
+      adrLetterInput.val() + adrNumberInput.val(), // number (with letter)
+      adrNameInput.val().split(' ').map(function(el) { // capitalized name
         return el.charAt(0).toUpperCase() + el.slice(1);
       }).join(' '),
       addressString, // address
@@ -124,9 +139,9 @@ function addElement() {
   );
 
   // add it to html
-  $("#adrList").append(
+  adrListDocument.append(
     "<tr><td>" +
-    adrList[count][0] + "</td><td onclick=\"javascript: editPacket(" + count + ")\">" +
+    adrList[count][0] + "</td><td onclick=\"editPacket(" + count + ")\">" +
     adrList[count][1] + "</td><td>" +
     adrList[count][2] +
     "</td></tr>"
@@ -134,23 +149,23 @@ function addElement() {
 
   count++;
   $("#scoreOutput").html(count);
-  if($("#adrNumber").is(":hidden")) {
-    $("#adrName").focus();
+  if(adrNumberInput.is(":hidden")) {
+    adrNameInput.focus();
   } else {
-    $("#adrNumber").focus();
+    adrNumberInput.focus();
   }
 
   // reset val to defaults
-  if ($("#adrNumber").val() !== "") {
+  if (adrNumberInput.val() !== "") {
     // increment item number
-    $("#adrNumber").val( parseInt($("#adrNumber").val()) + 1 );
+    adrNumberInput.val( parseInt(adrNumberInput.val()) + 1 );
   } else {
-    $("#adrNumber").val("");
+    adrNumberInput.val("");
   }
-  $("#adrName").val("");
-  $("#adrAddressStreet").val("");
-  $("#adrAddressBuilding").val("");
-  $("#adrAddressApartment").val("");
+  adrNameInput.val("");
+  adrAddressStreetInput.val("");
+  adrAddressBuildingInput.val("");
+  adrAddressApartmentInput.val("");
 
   isInDB = false;
 }
@@ -202,6 +217,7 @@ function loadWaybill () {
       //console.log(reader.result);
       $("#packetTypeSelect").hide();
       $("#packetList").show();
+      //noinspection JSCheckFunctionSignatures
       adrList = JSON.parse(reader.result);
       count = adrList.length;
       rebuildTable();
@@ -214,11 +230,11 @@ function loadWaybill () {
 }
 
 function rebuildTable() {
-  $('#adrList td').parent().remove();
+  adrListDocument.find('td').parent().remove();
   for (var item = 0; item < adrList.length; ++item) {
-    $("#adrList").append(
+    adrListDocument.append(
       "<tr><td>" +
-      adrList[item][0] + "</td><td onclick=\"javascript: editPacket(" + item + ")\">" +
+      adrList[item][0] + "</td><td onclick=\"editPacket(" + item + ")\">" +
       adrList[item][1] + "</td><td>" +
       adrList[item][2] +
       "</td></tr>"
@@ -298,10 +314,17 @@ function packetPrintTabInit() {
   });
 
   // initialize interface elements
+  adrLetterInput = $("#adrLetter");
+  adrNumberInput = $("#adrNumber");
+  adrNameInput = $("#adrName");
+  adrAddressStreetInput = $("#adrAddressStreet");
+  adrAddressBuildingInput = $("#adrAddressBuilding");
+  adrAddressApartmentInput = $("#adrAddressApartment");
+  adrListDocument = $("#adrList");
+
   $( "input[type='radio']" ).checkboxradio();
 
-  $("#selectTypeButton").button();
-  $("#selectTypeButton").click(function (event) {
+  $("#selectTypeButton").button().click(function (event) {
     $("#packetTypeSelect").hide();
     if ($("#noNumRadio").is(":checked")) {
       $("#adrNumberLabel").hide();
@@ -311,28 +334,26 @@ function packetPrintTabInit() {
     $("#packetList").show();
   });
 
-  $("#loadWaybillButton").button();
-  $("#loadWaybillButton").click(function (event) {
+  $("#loadWaybillButton").button().click(function (event) {
     loadWaybill();
   });
 
-  $("#adrName").autocomplete({
+  adrNameInput.autocomplete({
     source: function(request, response) {
       var results = $.ui.autocomplete.filter(availableNames, request.term);
       response(results.slice(0, 10));
     }
   });
 
-  $("#adrAddressStreet").autocomplete({
+  adrAddressStreetInput.autocomplete({
     source: availableStreets
   });
 
-  $("#addPacketButton").button();
-  $("#addPacketButton").click(function (event) {
+  $("#addPacketButton").button().click(function (event) {
     try {
-      if (global.config.area[$("#adrAddressStreet").val()][$("#adrAddressBuilding").val()] !== undefined) {
+      if (global.config.area[adrAddressStreetInput.val()][adrAddressBuildingInput.val()] !== undefined) {
         compileAddress();
-        if (confirm("Добавить данное вложение?\n" + $("#adrName").val() + "\n" + addressString)) {
+        if (confirm("Добавить данное вложение?\n" + adrNameInput.val() + "\n" + addressString)) {
           addElement();
         }
       } else {
@@ -343,18 +364,15 @@ function packetPrintTabInit() {
     }
   });
 
-  $("#printPacketButton").button();
-  $("#printPacketButton").click(function (event) {
+  $("#printPacketButton").button().click(function (event) {
     sendData();
   });
 
-  $("#saveWaybillButton").button();
-  $("#saveWaybillButton").click(function (event) {
+  $("#saveWaybillButton").button().click(function (event) {
   	saveWaybill();
   });
 
-  $("#printBlank").button();
-  $("#printBlank").click(function (event) {
+  $("#printBlank").button().click(function (event) {
     printBlank();
   })
 }
