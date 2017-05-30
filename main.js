@@ -90,7 +90,7 @@ function loadApp() {
 
     win.menu = main_menu;
   });
-};
+}
 
 function loadAdminApp() {
   nw.Window.open('index.html', {"width": 1366, "height": 768}, function(win) {
@@ -198,4 +198,4 @@ function loadAdminApp() {
 
     win.menu = main_menu;
   });
-};
+}

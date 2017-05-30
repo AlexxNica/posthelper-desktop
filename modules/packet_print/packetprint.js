@@ -1,5 +1,4 @@
 /* global nw */
-/** @namespace nw.Window */
 /** @namespace global.config */
 /** @namespace global.config.postCode */
 /** @namespace global.config.postName */
@@ -91,7 +90,7 @@ function addElement() {
 
   // check for count limit
 
-  if (count >= 32) {
+  if (count >= 48) {
     alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
     return;
   }
@@ -168,6 +167,10 @@ function addElement() {
   adrAddressApartmentInput.val("");
 
   isInDB = false;
+
+  if (count = 48) {
+    alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
+  }
 }
 
 function sendData() {

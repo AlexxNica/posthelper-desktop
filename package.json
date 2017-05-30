@@ -1,4 +1,7 @@
 {
   "name": "PostHelper",
-  "main": "main.js"
+  "main": "main.js",
+  "window": {
+	"icon": "favicon.png"
+  }
 }
