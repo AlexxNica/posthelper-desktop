@@ -65,6 +65,14 @@ function loadApp() {
 
     var propertiesMenu = new nw.Menu();
     propertiesMenu.append(new nw.MenuItem({
+      label: 'Руководство пользователя',
+      click: function() {
+        nw.Window.open('res/manual.html',{"width": 1366, "height": 768}, function(win){
+          win.maximize();
+        });
+      }
+    }));
+    propertiesMenu.append(new nw.MenuItem({
       label: 'О программе',
       click: function() {
         nw.Window.open('modules/about/index.html');
@@ -143,7 +151,7 @@ function loadAdminApp() {
 
     var developmentMenu = new nw.Menu();
     developmentMenu.append(new nw.MenuItem({
-      label: 'Базы даннных',
+      label: 'Database Control',
       click: function() {
         win.window.location.href = './modules/dbtest/index.html';
       }
@@ -166,8 +174,22 @@ function loadAdminApp() {
         win.window.location.href = './modules/mstk_test/index.html';
       }
     }));
+    developmentMenu.append(new nw.MenuItem({
+      label: 'stats test',
+      click: function() {
+        win.window.location.href = './modules/stats_test/index.html';
+      }
+    }));
 
     var propertiesMenu = new nw.Menu();
+    propertiesMenu.append(new nw.MenuItem({
+      label: 'Руководство пользователя',
+      click: function() {
+        nw.Window.open('res/manual.html',{"width": 1366, "height": 768}, function(win){
+          win.maximize();
+        });
+      }
+    }));
     propertiesMenu.append(new nw.MenuItem({
       label: 'О программе',
       click: function() {

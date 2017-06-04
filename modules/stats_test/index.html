@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stats Test</title>
+  <link rel="stylesheet" href="../../lib/jquery-ui.css">
+  <script type="text/javascript" src="../../lib/external/jquery/jquery.js"></script>
+  <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../lib/external/mathjs/math.min.js"></script>
+  <script type="text/javascript" src="stats.js"></script>
+  <script type="text/javascript">
+    $( function() {
+      // onload
+      statsInit();
+    });
+  </script>
+  <style>
+    .fieldset-form {
+      padding: 0;
+      border: 0;
+      margin-top: 25px;
+    }
+    body {
+      font-family: sans-serif;
+    }
+    label {
+      display: inline-block;
+      width: 140px;
+      text-align: right;
+      padding: 6px;
+    }
+    input {
+      padding: 6px;
+      font-size: 12pt;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <button id="newButton">New</button>
+  </div>
+  <div id="editDialog" title="New">
+    <fieldset class="fieldset-form">
+      <div>
+        <label for="evalInput">Quantity</label>
+        <input type="text" class="ui-widget-content ui-corner-all" id="evalInput" name="evalInput">
+        <button id="evaluateButton">Evaluate</button>
+      </div>
+      <div>
+        <label for="input2">Smth else</label>
+        <input type="text" class="type ui-widget-content ui-corner-all" name="input2">
+        <button id="button2">Evaluate</button>
+      </div>
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </div>
+</body>
+</html>
