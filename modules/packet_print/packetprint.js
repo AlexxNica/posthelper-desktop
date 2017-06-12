@@ -168,7 +168,7 @@ function addElement() {
 
   isInDB = false;
 
-  if (count = 48) {
+  if (count === 48) {
     alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
   }
 }
