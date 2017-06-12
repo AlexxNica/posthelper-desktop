@@ -2,6 +2,6 @@
   "name": "PostHelper",
   "main": "main.js",
   "window": {
-	"icon": "favicon.png"
+	  "icon": "favicon.png"
   }
 }
