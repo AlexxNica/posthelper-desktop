@@ -153,35 +153,41 @@ function loadAdminApp() {
     developmentMenu.append(new nw.MenuItem({
       label: 'Database Control',
       click: function() {
-        win.window.location.href = './modules/dbtest/index.html';
+        win.window.location.href = 'tests/dbtest/index.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'colresizable',
       click: function() {
-        win.window.location.href = './modules/link_test/link.html';
+        win.window.location.href = 'tests/link_test/link.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'encryption test',
       click: function() {
-        win.window.location.href = './modules/enc_test/index.html';
+        win.window.location.href = 'tests/enc_test/index.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'mstk test',
       click: function() {
-        win.window.location.href = './modules/mstk_test/index.html';
+        win.window.location.href = 'tests/mstk_test/index.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'stats test',
       click: function() {
-        win.window.location.href = './modules/stats_test/index.html';
+        win.window.location.href = 'tests/stats_test/index.html';
       }
     }));
 
     var propertiesMenu = new nw.Menu();
+    propertiesMenu.append(new nw.MenuItem({
+      label: "Настройки",
+      click: function() {
+        nw.Window.open('modules/settings/index.html');
+      }
+    }));
     propertiesMenu.append(new nw.MenuItem({
       label: 'Руководство пользователя',
       click: function() {
