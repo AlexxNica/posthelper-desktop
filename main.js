@@ -153,31 +153,31 @@ function loadAdminApp() {
     developmentMenu.append(new nw.MenuItem({
       label: 'Database Control',
       click: function() {
-        win.window.location.href = 'tests/dbtest/index.html';
+        win.window.location.href = 'tests/database/index.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'colresizable',
       click: function() {
-        win.window.location.href = 'tests/link_test/link.html';
+        win.window.location.href = 'tests/colresizable/link.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'encryption test',
       click: function() {
-        win.window.location.href = 'tests/enc_test/index.html';
+        win.window.location.href = 'tests/encrypting/index.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'mstk test',
       click: function() {
-        win.window.location.href = 'tests/mstk_test/index.html';
+        win.window.location.href = 'tests/area_check/index.html';
       }
     }));
     developmentMenu.append(new nw.MenuItem({
       label: 'stats test',
       click: function() {
-        win.window.location.href = 'tests/stats_test/index.html';
+        win.window.location.href = 'tests/statistics/index.html';
       }
     }));
 
