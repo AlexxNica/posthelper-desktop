@@ -7,10 +7,10 @@ try {
   alert("Ошибка: не найден файл конфигурации");
 }
 
-nw.Window.open('modules/login/index.html');
+nw.Window.open('modules/login/index.html',{"show": false});
 
 function loadApp() {
-  nw.Window.open('index.html', {"width": 1366, "height": 768}, function(win) {
+  nw.Window.open('index.html', {"width": 1366, "height": 768, "show": false}, function(win) {
     win.maximize();
     var main_menu = new nw.Menu({ type: 'menubar' });
 
@@ -75,7 +75,7 @@ function loadApp() {
     propertiesMenu.append(new nw.MenuItem({
       label: 'О программе',
       click: function() {
-        nw.Window.open('modules/about/index.html');
+        nw.Window.open('modules/about/index.html', {"show": false});
       }
     }));
 
