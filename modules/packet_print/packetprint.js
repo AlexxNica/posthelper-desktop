@@ -1,4 +1,4 @@
-/* global nw */
+/** @namespace nw */
 /** @namespace global.config */
 /** @namespace global.config.postCode */
 /** @namespace global.config.postName */
@@ -148,11 +148,7 @@ function addElement() {
 
   count++;
   $("#scoreOutput").html(count);
-  if(adrNumberInput.is(":hidden")) {
-    adrNameInput.focus();
-  } else {
-    adrNumberInput.focus();
-  }
+  adrNameInput.focus();
 
   // reset val to defaults
   if (adrNumberInput.val() !== "") {
