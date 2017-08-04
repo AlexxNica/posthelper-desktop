@@ -1,4 +1,5 @@
-/* global nw */
+/** @namespace nw */
+
 var fs = require('fs');
 try {
   var configFile = fs.readFileSync("res/config.json");
