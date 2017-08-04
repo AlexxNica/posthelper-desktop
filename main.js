@@ -55,6 +55,13 @@ function loadApp(usertype) {
       }
     }));
     functionsMenu.append(new nw.MenuItem({
+      label: 'Ярлыки на возврат',
+      click: function () {
+        // TODO: implement f20 print
+        win.window.location.href = './modules/f20_print/index.html';
+      }
+    }));
+    functionsMenu.append(new nw.MenuItem({
       label: 'Дополнительные',
       submenu: additionalFunctionsMenu
     }));
