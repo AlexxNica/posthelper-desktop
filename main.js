@@ -3,11 +3,12 @@ var fs = require('fs');
 try {
   var configFile = fs.readFileSync("res/config.json");
   var config = JSON.parse(configFile);
+  nw.Window.open('modules/login/index.html',{"show": false});
 } catch (e) {
   alert("Ошибка: не найден файл конфигурации");
+  nw.Window.open('', { show: false });
+  nw.App.quit();
 }
-
-nw.Window.open('modules/login/index.html',{"show": false});
 
 function loadApp() {
   nw.Window.open('index.html', {"width": 1366, "height": 768, "show": false}, function(win) {
