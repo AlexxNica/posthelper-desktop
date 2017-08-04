@@ -14,14 +14,14 @@
         nw.Window.get().evalNWBin(null, 'password.bin');
         $("#loginAdminButton").button().click(function (event) {
           if ($("#passwordInput").val() === password) {
-            global.loadAdminApp();
+            global.loadApp('admin');
             nw.Window.get().close(true);
           } else {
             alert("Неправильный пароль");
           }
         });
         $("#loginButton").button().click(function (event) {
-          global.loadApp();
+          global.loadApp('user');
           nw.Window.get().close(true);
         });
       });
