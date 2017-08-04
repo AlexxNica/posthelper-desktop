@@ -1,0 +1,11 @@
+input.type {
+  margin-top: 10px;
+  padding: 3px;
+}
+table {
+  border-collapse: collapse;
+}
+td, th {
+  padding: 3px;
+  border: 1px solid black;
+}

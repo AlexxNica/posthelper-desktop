@@ -1,0 +1,47 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PostHelper - F. 20 Print</title>
+  <link rel="stylesheet" type="text/css" href="print_layout.css">
+</head>
+<body id="main">
+<script>
+  var indexList = window.data;
+  var body = document.getElementById('main');
+  var date = new Date();
+
+  function createPage(listSlice) {
+    var page = document.createElement('page');
+    page.setAttribute('size', 'A4');
+    var table = document.createElement('table');
+    table.setAttribute('style','width: 100%; height: 100%;');
+    body.appendChild(page);
+    page.appendChild(table);
+    var pageObject = {
+      rows: [],
+      frontSides: [],
+      backSides: []
+    };
+    for (var i = 0; i <= 5; i += 1) {
+      pageObject.rows.push(document.createElement('tr'));
+      pageObject.frontSides.push(document.createElement('td'));
+      pageObject.backSides.push(document.createElement('td'));
+    }
+    for (var i = 0; i <= 5; i += 1) {
+      table.appendChild(pageObject.rows[i]);
+    }
+    for (var index = 0; index <= 5; index += 1) {
+      pageObject.frontSides[index].innerHTML = indexList[index];
+      pageObject.backSides[index].innerHTML = date.toDateString();
+      pageObject.rows[index].appendChild(pageObject.frontSides[index]);
+      pageObject.rows[index].appendChild(pageObject.backSides[index]);
+    }
+  }
+  var c = 0;
+  while (c < indexList.length) {
+    createPage(indexList.slice(c, c + 6));
+    c += 6;
+  }
+</script>
+</body>
+</html>
