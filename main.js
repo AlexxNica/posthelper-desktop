@@ -12,7 +12,7 @@ try {
 }
 
 function loadApp(usertype) {
-  nw.Window.open('index.html', {"width": 1366, "height": 768, "show": false}, function(win) {
+  nw.Window.open('index.html', {"show": false}, function(win) {
     win.maximize();
     var main_menu = new nw.Menu({ type: 'menubar' });
 
