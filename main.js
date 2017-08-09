@@ -104,7 +104,7 @@ function loadApp(usertype) {
     resourcesMenu.append(new nw.MenuItem({
       label: 'Pochta.RU',
       click: function() {
-        nw.Window.open('http://pochta.ru',{"width": 1366, "height": 768}, function(win) {
+        nw.Window.open('http://pochta.ru', {}, function(win) {
           win.maximize();
         });
       }
@@ -114,7 +114,7 @@ function loadApp(usertype) {
     propertiesMenu.append(new nw.MenuItem({
       label: 'Руководство пользователя',
       click: function() {
-        nw.Window.open('res/manual.html',{"width": 1366, "height": 768}, function(win){
+        nw.Window.open('res/manual.html', {}, function(win){
           win.maximize();
         });
       }
