@@ -1,3 +1,9 @@
+@font-face {
+  font-family: Pechkin;
+  src: url(pechkin.ttf);
+}
+
+/* main tags*/
 body {
   background: rgb(204,204,204);
   font-family: sans-serif;
@@ -10,6 +16,8 @@ page {
   margin-bottom: 0.5cm;
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
 }
+
+/* page attributes*/
 page[size="A4"] {
   width: 21cm;
   height: 29.7cm;
@@ -42,11 +50,48 @@ page[size="A5"][layout="landscape"] {
     box-shadow: 0;
   }
 }
+
+/* layout attributes */
 table {
   /*margin: 10px;*/
   table-layout: fixed;
   border-color: black;
+  border-collapse: collapse; /* ? */
 }
 td {
   border: 1px solid black;
+}
+.container {
+  position: relative;
+}
+.index {
+  position: absolute;
+  font-family: Pechkin;
+  font-size: 38pt;
+  top: -17px;
+  right: 17px;
+}
+.f20 {
+  position: absolute;
+  top: -80px;
+  right: 10px;
+  font-size: 10pt;
+}
+.type {
+  position: absolute;
+  font-size: 14pt;
+  top: -80px;
+  right: 90px;
+}
+.tag {
+  position: absolute;
+  width: 95px;
+  top: -27px;
+  left: 12px
+}
+.cause {
+  
+}
+.timestamp {
+  
 }

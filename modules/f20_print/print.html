@@ -31,7 +31,7 @@
       table.appendChild(pageObject.rows[i]);
     }
     for (var index = 0; index <= 5; index += 1) {
-      pageObject.frontSides[index].innerHTML = indexList[index];
+      pageObject.frontSides[index].innerHTML = `<div class="index">\`${indexList[index]}</div>`;
       pageObject.backSides[index].innerHTML = date.toDateString();
       pageObject.rows[index].appendChild(pageObject.frontSides[index]);
       pageObject.rows[index].appendChild(pageObject.backSides[index]);
