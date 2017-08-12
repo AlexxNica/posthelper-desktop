@@ -297,8 +297,21 @@ function changeField(event) {
 
 function packetPrintTabInit() {
 
+  $("#loadingDialog").dialog({
+    autoOpen: false,
+    closeOnEscape: false,
+    resizable: false
+  });
+
+  $("#progressbar").progressbar({
+    value: false
+  });
+
   // hide table before waybill is created
+  $("#packetTypeSelect").hide();
   $("#packetList").hide();
+
+  $("#loadingDialog").dialog("open");
 
   // config loading
   availableStreets = global.config.streets;
@@ -320,7 +333,7 @@ function packetPrintTabInit() {
   nw.Window.get().evalNWBin(null, 'key.bin');
   try {
     if (key !== undefined) {
-      alert("Access granted");
+      //alert("Access granted");
     }
   } catch (e) {
     alert("Key file not found");
@@ -336,6 +349,9 @@ function packetPrintTabInit() {
       }
     }
   );
+  //alert("db loaded");
+  $("#loadingDialog").dialog("close");
+  $("#packetTypeSelect").show();
   console.log("Database loaded");
 
   // set ediiting dialog properties
