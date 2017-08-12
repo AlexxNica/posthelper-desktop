@@ -2,6 +2,9 @@
   "name": "PostHelper",
   "main": "main.js",
   "window": {
-	  "icon": "favicon.png"
+    "icon": "favicon.png"
+  },
+  "dependencies": {
+    "sqlite-cipher": "^0.3.5"
   }
 }

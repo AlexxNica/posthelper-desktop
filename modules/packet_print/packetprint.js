@@ -3,6 +3,9 @@
 /** @namespace global.config.postCode */
 /** @namespace global.config.postName */
 
+// requiring libs
+var sql = require('sqlite-cipher');
+
 var db; // database object
 var adrList = []; // array contains packets
 var addressString; // field for address
@@ -26,38 +29,66 @@ var adrListDocument;
 
 function selectAddress(name) {
   var query = 'SELECT address FROM addresses WHERE name LIKE ?';
-  db.transaction(function (tx) {
-    tx.executeSql(
-      query,
-      [name],
-      function (tx, results) {
-      //alert(results.rows.item(0).address);
-        try {
-          var address = results.rows.item(0).address.match(/[\wа-я]+/gi);
-          // check for two-word street name
-          if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
-            address[0] = address[0] + " " + address[1]; // compile it again
-            // shift other items
-            address[1] = address[2];
-            address[2] = address[3];
-          }
-          adrAddressStreetInput.val(address[0]);
-          adrAddressBuildingInput.val(address[1]);
-          adrAddressApartmentInput.val(address[2]);
-          isInDB = true;
-          if (isInDB) {
-            document.getElementById("adrAddressApartment").focus();
-          } else {
-            document.getElementById("adrAddressStreet").focus();
-          }
+  // db.transaction(function (tx) {
+  //   tx.executeSql(
+  //     query,
+  //     [name],
+  //     function (tx, results) {
+  //     //alert(results.rows.item(0).address);
+  //       try {
+  //         var address = results.rows.item(0).address.match(/[\wа-я]+/gi);
+  //         // check for two-word street name
+  //         if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
+  //           address[0] = address[0] + " " + address[1]; // compile it again
+  //           // shift other items
+  //           address[1] = address[2];
+  //           address[2] = address[3];
+  //         }
+  //         adrAddressStreetInput.val(address[0]);
+  //         adrAddressBuildingInput.val(address[1]);
+  //         adrAddressApartmentInput.val(address[2]);
+  //         isInDB = true;
+  //         if (isInDB) {
+  //           document.getElementById("adrAddressApartment").focus();
+  //         } else {
+  //           document.getElementById("adrAddressStreet").focus();
+  //         }
+  //       }
+  //       catch (e) {
+  //         isInDB = false;
+  //       }
+  //     },
+  //     null
+  //   );
+  // });
+  sql.runAsync(
+    query,
+    [name],
+    function (rows) {
+      try {
+        var address = rows[0].address.match(/[\wа-я]+/gi);
+        // check for two-word street name
+        if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
+          address[0] = address[0] + " " + address[1]; // compile it again
+          // shift other items
+          address[1] = address[2];
+          address[2] = address[3];
         }
-        catch (e) {
-          isInDB = false;
+        adrAddressStreetInput.val(address[0]);
+        adrAddressBuildingInput.val(address[1]);
+        adrAddressApartmentInput.val(address[2]);
+        isInDB = true;
+        if (isInDB) {
+          document.getElementById("adrAddressApartment").focus();
+        } else {
+          document.getElementById("adrAddressStreet").focus();
         }
-      },
-      null
-    );
-  });
+      }
+      catch (e) {
+        isInDB = false;
+      }
+    }
+  );
 }
 
 function printBlank() {
@@ -104,12 +135,16 @@ function addElement() {
     var name = adrNameInput.val().split(' ').map(function(el) {
       return el.charAt(0).toUpperCase() + el.slice(1);
     }).join(' ');
-    db.transaction( function (tx) {
-      tx.executeSql(
-        'INSERT INTO addresses (name, address) VALUES (?,?)',
-        [name, addressString]
-      );
-    });
+    // db.transaction( function (tx) {
+    //   tx.executeSql(
+    //     'INSERT INTO addresses (name, address) VALUES (?,?)',
+    //     [name, addressString]
+    //   );
+    // });
+    sql.run(
+      'INSERT INTO addresses (name, address) VALUES (?,?)',
+      [name, addressString]
+    );
   }
 
   // add new record for the list
@@ -270,18 +305,37 @@ function packetPrintTabInit() {
 
   // db loading
   availableNames.splice(0, availableNames.length);
-  db = openDatabase('addressDB', '0.1', 'adresses', 1024 * 1024);
-  db.transaction(function (tx) {
-    tx.executeSql(
-      'SELECT name FROM addresses',
-      [],
-      function(tx, results) {
-        for (var i = 0; i < results.rows.length; ++i) {
-          availableNames.push(results.rows.item(i).name);
-        }
+  // db = openDatabase('addressDB', '0.1', 'adresses', 1024 * 1024);
+  // db.transaction(function (tx) {
+  //   tx.executeSql(
+  //     'SELECT name FROM addresses',
+  //     [],
+  //     function(tx, results) {
+  //       for (var i = 0; i < results.rows.length; ++i) {
+  //         availableNames.push(results.rows.item(i).name);
+  //       }
+  //     }
+  //   );
+  // });
+  nw.Window.get().evalNWBin(null, 'key.bin');
+  try {
+    if (key !== undefined) {
+      alert("Access granted");
+    }
+  } catch (e) {
+    alert("Key file not found");
+    return;
+  }
+  var path = nw.App.dataPath + '/databases/' + global.config.extensionFolder + '/1.enc';
+  sql.connect(path, key, 'aes-256-ctr');
+  sql.runAsync(
+    'SELECT name FROM addresses',
+    function (rows) {
+      for (var i = 0; i < rows.length; ++i) {
+        availableNames.push(rows[i].name);
       }
-    );
-  });
+    }
+  );
   console.log("Database loaded");
 
   // set ediiting dialog properties
