@@ -14,6 +14,9 @@
   <script type="text/javascript" src="packetprint.js"></script>
   <script type="text/javascript">
     $( function() {
+      $(window).bind('beforeunload', function() {
+        return 'При закрытии модуля все несохраненные изменения будут потеряны.';
+      });
       $("#tableField").css('height', (window.innerHeight - 130)+'px');
       $(window).resize(function() {
         $("#tableField").css('height', (window.innerHeight - 130)+'px');
