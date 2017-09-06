@@ -339,7 +339,7 @@ function packetPrintTabInit() {
     alert("Key file not found");
     return;
   }
-  var path = nw.App.dataPath + '/1.enc';
+  var path = nw.App.dataPath + '/Address Database';
   sql.connect(path, key, 'aes-256-ctr');
   sql.runAsync(
     'SELECT name FROM addresses',
