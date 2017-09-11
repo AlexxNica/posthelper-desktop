@@ -4,6 +4,7 @@
 /** @namespace global.config.postName */
 
 // requiring libs
+var path = require('path');
 var sql = require('sqlite-cipher');
 
 var db; // database object
@@ -330,7 +331,7 @@ function packetPrintTabInit() {
   //     }
   //   );
   // });
-  nw.Window.get().evalNWBin(null, 'key.bin');
+  nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Key'));
   try {
     if (key !== undefined) {
       //alert("Access granted");
@@ -339,8 +340,8 @@ function packetPrintTabInit() {
     alert("Key file not found");
     return;
   }
-  var path = nw.App.dataPath + '/Address Database';
-  sql.connect(path, key, 'aes-256-ctr');
+  var dbpath = path.join(nw.App.dataPath, 'Address Database');
+  sql.connect(dbpath, key, 'aes-256-ctr');
   sql.runAsync(
     'SELECT name FROM addresses',
     function (rows) {

@@ -11,7 +11,8 @@
     <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
     <script>
       $( function() {
-        nw.Window.get().evalNWBin(null, 'password.bin');
+        var path = require('path');
+        nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'PH Password'));
         $("#loginAdminButton").button().click(function (event) {
           if ($("#passwordInput").val() === password) {
             global.loadApp('admin');
