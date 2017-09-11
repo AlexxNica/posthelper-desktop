@@ -1,8 +1,9 @@
 /** @namespace nw */
 
 var fs = require('fs');
+var path = require('path');
 try {
-  var configFile = fs.readFileSync("res/config.json");
+  var configFile = fs.readFileSync(path.join(nw.App.dataPath, '/PH Configuration'), 'utf-8');
   var config = JSON.parse(configFile);
   nw.Window.open('modules/login/index.html',{"show": false});
 } catch (e) {
@@ -21,7 +22,7 @@ function loadApp(usertype) {
       label: 'Новое окно',
       click: function() {
         if (usertype === 'admin') {
-          loadApp('admin')
+          loadApp('admin');
         } else {
           loadApp('user');
         }
