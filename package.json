@@ -1,7 +1,9 @@
 {
-  "name": "PostHelper",
+  "name": "posthelper-desktop",
+  "version": "0.9.0",
   "main": "main.js",
   "window": {
+    "title": "PostHelper",
     "icon": "favicon.png"
   },
   "dependencies": {
