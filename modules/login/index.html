@@ -13,15 +13,15 @@
       $( function() {
         var path = require('path');
         nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'PH Password'));
-        $("#loginAdminButton").button().click(function (event) {
-          if ($("#passwordInput").val() === password) {
+        $('#loginAdminButton').button().click(function (event) {
+          if ($('#passwordInput').val() === password) {
             global.loadApp('admin');
             nw.Window.get().close(true);
           } else {
-            alert("Неправильный пароль");
+            alert('Неправильный пароль');
           }
         });
-        $("#loginButton").button().click(function (event) {
+        $('#loginButton').button().click(function (event) {
           global.loadApp('user');
           nw.Window.get().close(true);
         });

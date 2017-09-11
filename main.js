@@ -5,15 +5,15 @@ var path = require('path');
 try {
   var configFile = fs.readFileSync(path.join(nw.App.dataPath, '/PH Configuration'), 'utf-8');
   var config = JSON.parse(configFile);
-  nw.Window.open('modules/login/index.html',{"show": false});
+  nw.Window.open('modules/login/index.html', { 'show': false });
 } catch (e) {
-  alert("Ошибка: не найден файл конфигурации");
+  alert('Ошибка: не найден файл конфигурации');
   nw.Window.open('', { show: false });
   nw.App.quit();
 }
 
 function loadApp(usertype) {
-  nw.Window.open('index.html', {"show": false}, function(win) {
+  nw.Window.open('index.html', {'show': false}, function(win) {
     win.maximize();
     var main_menu = new nw.Menu({ type: 'menubar' });
 
@@ -123,7 +123,7 @@ function loadApp(usertype) {
     propertiesMenu.append(new nw.MenuItem({
       label: 'О программе',
       click: function() {
-        nw.Window.open('modules/about/index.html', {"show": false});
+        nw.Window.open('modules/about/index.html', { 'show': false });
       }
     }));
 
@@ -136,7 +136,7 @@ function loadApp(usertype) {
       submenu: functionsMenu
     }));
     main_menu.append(new nw.MenuItem({
-      label: "Ресурсы",
+      label: 'Ресурсы',
       submenu: resourcesMenu
     }));
     if (usertype === 'admin') {

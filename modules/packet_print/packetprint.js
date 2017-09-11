@@ -30,38 +30,6 @@ var adrListDocument;
 
 function selectAddress(name) {
   var query = 'SELECT address FROM addresses WHERE name LIKE ?';
-  // db.transaction(function (tx) {
-  //   tx.executeSql(
-  //     query,
-  //     [name],
-  //     function (tx, results) {
-  //     //alert(results.rows.item(0).address);
-  //       try {
-  //         var address = results.rows.item(0).address.match(/[\wа-я]+/gi);
-  //         // check for two-word street name
-  //         if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
-  //           address[0] = address[0] + " " + address[1]; // compile it again
-  //           // shift other items
-  //           address[1] = address[2];
-  //           address[2] = address[3];
-  //         }
-  //         adrAddressStreetInput.val(address[0]);
-  //         adrAddressBuildingInput.val(address[1]);
-  //         adrAddressApartmentInput.val(address[2]);
-  //         isInDB = true;
-  //         if (isInDB) {
-  //           document.getElementById("adrAddressApartment").focus();
-  //         } else {
-  //           document.getElementById("adrAddressStreet").focus();
-  //         }
-  //       }
-  //       catch (e) {
-  //         isInDB = false;
-  //       }
-  //     },
-  //     null
-  //   );
-  // });
   sql.runAsync(
     query,
     [name],
@@ -70,7 +38,7 @@ function selectAddress(name) {
         var address = rows[0].address.match(/[\wа-я]+/gi);
         // check for two-word street name
         if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
-          address[0] = address[0] + " " + address[1]; // compile it again
+          address[0] = address[0] + ' ' + address[1]; // compile it again
           // shift other items
           address[1] = address[2];
           address[2] = address[3];
@@ -80,9 +48,9 @@ function selectAddress(name) {
         adrAddressApartmentInput.val(address[2]);
         isInDB = true;
         if (isInDB) {
-          document.getElementById("adrAddressApartment").focus();
+          document.getElementById('adrAddressApartment').focus();
         } else {
-          document.getElementById("adrAddressStreet").focus();
+          document.getElementById('adrAddressStreet').focus();
         }
       }
       catch (e) {
@@ -94,36 +62,36 @@ function selectAddress(name) {
 
 function printBlank() {
   var now = new Date();
-  var stampCode = "<div class=\"stamp\">" +
-    now.toStringF() + "г.<br>" +
+  var stampCode = '<div class="stamp">' +
+    now.toStringF() + 'г.<br>' +
     now.toStringT() +
-    "<br><div class=\"postcode\"><b>" +
+    '<br><div class="postcode"><b>' +
     global.config.postCode +
-    "</b></div><br>ОПС<br><div class=\"postname\">" +
+    '</b></div><br>ОПС<br><div class="postname">' +
     global.config.postName +
-    "</div></div>";
+    '</div></div>';
   for (var i = 0; i <= 3; ++i) {
-    adrList.push(["","_____________________","______________", stampCode]);
+    adrList.push(['','_____________________','______________', stampCode]);
   }
   sendData();
 }
 
 function compileAddress() {
   addressString =
-    adrAddressStreetInput.val() + " " +
-    adrAddressBuildingInput.val() + "-" +
+    adrAddressStreetInput.val() + ' ' +
+    adrAddressBuildingInput.val() + '-' +
     adrAddressApartmentInput.val()
   ;
 }
 
 function addElement() {
 
-  $("table").colResizable();
+  $('table').colResizable();
 
   // check for count limit
 
   if (count >= 48) {
-    alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
+    alert('Досигнут максимум вложений в список.\nДля продолжения создайте новый список.');
     return;
   }
 
@@ -136,12 +104,6 @@ function addElement() {
     var name = adrNameInput.val().split(' ').map(function(el) {
       return el.charAt(0).toUpperCase() + el.slice(1);
     }).join(' ');
-    // db.transaction( function (tx) {
-    //   tx.executeSql(
-    //     'INSERT INTO addresses (name, address) VALUES (?,?)',
-    //     [name, addressString]
-    //   );
-    // });
     sql.run(
       'INSERT INTO addresses (name, address) VALUES (?,?)',
       [name, addressString]
@@ -153,14 +115,14 @@ function addElement() {
   var now = new Date();
 
   // generate timestamp
-  var stampCode = "<div class=\"stamp\">" +
-    now.toStringF() + "г.<br>" +
+  var stampCode = '<div class="stamp">' +
+    now.toStringF() + 'г.<br>' +
     now.toStringT() +
-    "<br><div class=\"postcode\"><b>" +
+    '<br><div class="postcode"><b>' +
     global.config.postCode +
-    "</b></div><br>ОПС<br><div class=\"postname\">" +
+    '</b></div><br>ОПС<br><div class="postname">' +
     global.config.postName +
-    "</div></div>";
+    '</div></div>';
 
   adrList.push(
     [
@@ -175,50 +137,50 @@ function addElement() {
 
   // add it to html
   adrListDocument.append(
-    "<tr><td>" +
-    adrList[count][0] + "</td><td onclick=\"editPacket(" + count + ")\">" +
-    adrList[count][1] + "</td><td>" +
+    '<tr><td>' +
+    adrList[count][0] + '</td><td onclick="editPacket(' + count + ')">' +
+    adrList[count][1] + '</td><td>' +
     adrList[count][2] +
-    "</td></tr>"
+    '</td></tr>'
   );
 
   count++;
-  $("#scoreOutput").html(count);
+  $('#scoreOutput').html(count);
   adrNameInput.focus();
 
   // reset val to defaults
-  if (adrNumberInput.val() !== "") {
+  if (adrNumberInput.val() !== '') {
     // increment item number
     adrNumberInput.val( parseInt(adrNumberInput.val()) + 1 );
   } else {
-    adrNumberInput.val("");
+    adrNumberInput.val('');
   }
-  adrNameInput.val("");
-  adrAddressStreetInput.val("");
-  adrAddressBuildingInput.val("");
-  adrAddressApartmentInput.val("");
+  adrNameInput.val('');
+  adrAddressStreetInput.val('');
+  adrAddressBuildingInput.val('');
+  adrAddressApartmentInput.val('');
 
   isInDB = false;
 
   if (count === 48) {
-    alert("Досигнут максимум вложений в список.\nДля продолжения создайте новый список.");
+    alert('Досигнут максимум вложений в список.\nДля продолжения создайте новый список.');
   }
 }
 
 function sendData() {
   var toPush; // placeholder for empty positions
-  if ($("#noNumRadio").is(":checked")) {
+  if ($('#noNumRadio').is(':checked')) {
     toPush = [
-      "",
-      "_____________________","______________",
-      "<div class=\"stamp\"></div>"
+      '',
+      '_____________________','______________',
+      '<div class="stamp"></div>'
     ];
   } else {
     toPush = [
-      "____",
-      "_____________________",
-      "______________",
-      "<div class=\"stamp\"></div>"
+      '____',
+      '_____________________',
+      '______________',
+      '<div class="stamp"></div>'
     ];
   }
   // fill spaces in the notifications form
@@ -227,7 +189,7 @@ function sendData() {
       adrList.push(toPush);
     }
   }
-  nw.Window.open('modules/packet_print/print.html', {"width": 1366, "height": 768}, function(win) {
+  nw.Window.open('modules/packet_print/print.html', {'width': 1366, 'height': 768}, function(win) {
     win.maximize();
     // data is the list
     win.window.data = adrList;
@@ -237,9 +199,9 @@ function sendData() {
 function saveWaybill() {
   var now = new Date();
   var waybill = JSON.stringify(adrList);
-  var blob = new Blob([waybill], {type: "application/json"});
+  var blob = new Blob([waybill], {type: 'application/json'});
   // name contains month and day of creating waybill
-  var filename = "packets" + now.toStringFShort() + ".json";
+  var filename = 'packets' + now.toStringFShort() + '.json';
   saveAs(blob, filename);
 }
 
@@ -250,17 +212,17 @@ function loadWaybill () {
     var reader = new FileReader();
     reader.onload = function() {
       //console.log(reader.result);
-      $("#packetTypeSelect").hide();
-      $("#packetList").show();
+      $('#packetTypeSelect').hide();
+      $('#packetList').show();
       //noinspection JSCheckFunctionSignatures
       adrList = JSON.parse(reader.result);
       count = adrList.length;
       rebuildTable();
-      $("#scoreOutput").html(count);
+      $('#scoreOutput').html(count);
     };
     reader.readAsText(file);
   } else {
-    alert("File not supported, .txt or .json files only");
+    alert('File not supported, .txt or .json files only');
   }
 }
 
@@ -268,76 +230,64 @@ function rebuildTable() {
   adrListDocument.find('td').parent().remove();
   for (var item = 0; item < adrList.length; ++item) {
     adrListDocument.append(
-      "<tr><td>" +
-      adrList[item][0] + "</td><td onclick=\"editPacket(" + item + ")\">" +
-      adrList[item][1] + "</td><td>" +
+      '<tr><td>' +
+      adrList[item][0] + '</td><td onclick="editPacket(' + item + ')">' +
+      adrList[item][1] + '</td><td>' +
       adrList[item][2] +
-      "</td></tr>"
+      '</td></tr>'
     );
   }
-  $("table").colResizable();
+  $('table').colResizable();
 }
 
 function editPacket(number) {
   numberToEdit = number;
-  editDialog.dialog("open");
-  $("#nameEdit").val(adrList[number][1]);
-  $("#addressEdit").val(adrList[number][2]);
+  editDialog.dialog('open');
+  $('#nameEdit').val(adrList[number][1]);
+  $('#addressEdit').val(adrList[number][2]);
 }
 
 function changeField(event) {
   if (event.keyCode === 13) {
     selectAddress($('#adrName').val());
     if (isInDB) {
-      document.getElementById("adrAddressApartment").focus();
+      document.getElementById('adrAddressApartment').focus();
     } else {
-      document.getElementById("adrAddressStreet").focus();
+      document.getElementById('adrAddressStreet').focus();
     }
   }
 }
 
 function packetPrintTabInit() {
 
-  $("#loadingDialog").dialog({
+  $('#loadingDialog').dialog({
     autoOpen: false,
     closeOnEscape: false,
     resizable: false
   });
 
-  $("#progressbar").progressbar({
+  $('#progressbar').progressbar({
     value: false
   });
 
   // hide table before waybill is created
-  $("#packetTypeSelect").hide();
-  $("#packetList").hide();
+  $('#packetTypeSelect').hide();
+  $('#packetList').hide();
 
-  $("#loadingDialog").dialog("open");
+  $('#loadingDialog').dialog('open');
 
   // config loading
   availableStreets = global.config.streets;
 
   // db loading
   availableNames.splice(0, availableNames.length);
-  // db = openDatabase('addressDB', '0.1', 'adresses', 1024 * 1024);
-  // db.transaction(function (tx) {
-  //   tx.executeSql(
-  //     'SELECT name FROM addresses',
-  //     [],
-  //     function(tx, results) {
-  //       for (var i = 0; i < results.rows.length; ++i) {
-  //         availableNames.push(results.rows.item(i).name);
-  //       }
-  //     }
-  //   );
-  // });
   nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Key'));
   try {
     if (key !== undefined) {
       //alert("Access granted");
     }
   } catch (e) {
-    alert("Key file not found");
+    alert('Key file not found');
     return;
   }
   var dbpath = path.join(nw.App.dataPath, 'Address Database');
@@ -351,60 +301,60 @@ function packetPrintTabInit() {
     }
   );
   //alert("db loaded");
-  $("#loadingDialog").dialog("close");
-  $("#packetTypeSelect").show();
-  console.log("Database loaded");
+  $('#loadingDialog').dialog('close');
+  $('#packetTypeSelect').show();
+  console.log('Database loaded');
 
   // set ediiting dialog properties
-  editDialog = $("#editDialog").dialog({
+  editDialog = $('#editDialog').dialog({
     autoOpen: false,
     height: 400,
     width: 350,
     modal: true,
     buttons: {
       Удалить: function () {
-        if (confirm("Вы действительно хотите удалить данную позицию?")) {
+        if (confirm('Вы действительно хотите удалить данную позицию?')) {
           adrList.splice(numberToEdit, 1);
           count = adrList.length;
           rebuildTable();
-          $("#scoreOutput").html(count);
-          editDialog.dialog("close");
+          $('#scoreOutput').html(count);
+          editDialog.dialog('close');
         }
       },
       Сохранить: function() {
-        adrList[numberToEdit][1] = $("#nameEdit").val();
-        adrList[numberToEdit][2] = $("#addressEdit").val();
+        adrList[numberToEdit][1] = $('#nameEdit').val();
+        adrList[numberToEdit][2] = $('#addressEdit').val();
         rebuildTable();
-        editDialog.dialog("close");
+        editDialog.dialog('close');
       },
       Отмена: function() {
-        editDialog.dialog( "close" );
+        editDialog.dialog( 'close' );
       }
     }
   });
 
   // initialize interface elements
-  adrLetterInput = $("#adrLetter");
-  adrNumberInput = $("#adrNumber");
-  adrNameInput = $("#adrName");
-  adrAddressStreetInput = $("#adrAddressStreet");
-  adrAddressBuildingInput = $("#adrAddressBuilding");
-  adrAddressApartmentInput = $("#adrAddressApartment");
-  adrListDocument = $("#adrList");
+  adrLetterInput = $('#adrLetter');
+  adrNumberInput = $('#adrNumber');
+  adrNameInput = $('#adrName');
+  adrAddressStreetInput = $('#adrAddressStreet');
+  adrAddressBuildingInput = $('#adrAddressBuilding');
+  adrAddressApartmentInput = $('#adrAddressApartment');
+  adrListDocument = $('#adrList');
 
-  $( "input[type='radio']" ).checkboxradio();
+  $( 'input[type=\'radio\']' ).checkboxradio();
 
-  $("#selectTypeButton").button().click(function (event) {
-    $("#packetTypeSelect").hide();
-    if ($("#noNumRadio").is(":checked")) {
-      $("#adrNumberLabel").hide();
-      $("#adrLetter").hide();
-      $("#adrNumber").hide();
+  $('#selectTypeButton').button().click(function (event) {
+    $('#packetTypeSelect').hide();
+    if ($('#noNumRadio').is(':checked')) {
+      $('#adrNumberLabel').hide();
+      $('#adrLetter').hide();
+      $('#adrNumber').hide();
     }
-    $("#packetList").show();
+    $('#packetList').show();
   });
 
-  $("#loadWaybillButton").button().click(function (event) {
+  $('#loadWaybillButton').button().click(function (event) {
     loadWaybill();
   });
 
@@ -419,30 +369,30 @@ function packetPrintTabInit() {
     source: availableStreets
   });
 
-  $("#addPacketButton").button().click(function (event) {
+  $('#addPacketButton').button().click(function (event) {
     try {
       if (global.config.area[adrAddressStreetInput.val()][adrAddressBuildingInput.val()] !== undefined) {
         compileAddress();
-        if (confirm("Добавить данное вложение?\n" + adrNameInput.val() + "\n" + addressString)) {
+        if (confirm('Добавить данное вложение?\n' + adrNameInput.val() + '\n' + addressString)) {
           addElement();
         }
       } else {
-        alert("Данный адрес не входит в участок отделения");
+        alert('Данный адрес не входит в участок отделения');
       }
     } catch (e) {
-      alert("Данный адрес не входит в участок отделения");
+      alert('Данный адрес не входит в участок отделения');
     }
   });
 
-  $("#printPacketButton").button().click(function (event) {
+  $('#printPacketButton').button().click(function (event) {
     sendData();
   });
 
-  $("#saveWaybillButton").button().click(function (event) {
-  	saveWaybill();
+  $('#saveWaybillButton').button().click(function (event) {
+    saveWaybill();
   });
 
-  $("#printBlank").button().click(function (event) {
+  $('#printBlank').button().click(function (event) {
     printBlank();
-  })
+  });
 }
