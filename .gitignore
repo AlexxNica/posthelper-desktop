@@ -1,14 +1,6 @@
-/.idea/
-/nbproject/
-/res/config.json
-key.bin
-key.js
-password.bin
-password.js
-posthelper.sublime-project
-posthelper.sublime-workspace
 /modules/packet_print/logo.svg
 /modules/packet_print/logo.png
 v8.log
 /modules/f20_print/pechkin.ttf
 .eslintrc.json
+package-lock.json
