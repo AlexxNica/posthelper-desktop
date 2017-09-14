@@ -1,7 +1,12 @@
 {
-  "name": "PostHelper",
+  "name": "posthelper-desktop",
+  "version": "0.9.0",
   "main": "main.js",
   "window": {
-	  "icon": "favicon.png"
+    "title": "PostHelper",
+    "icon": "favicon.png"
+  },
+  "dependencies": {
+    "sqlite-cipher": "^0.3.5"
   }
 }

@@ -14,6 +14,9 @@
   <script type="text/javascript" src="packetprint.js"></script>
   <script type="text/javascript">
     $( function() {
+      $(window).bind('beforeunload', function() {
+        return 'При закрытии модуля все несохраненные изменения будут потеряны.';
+      });
       $("#tableField").css('height', (window.innerHeight - 130)+'px');
       $(window).resize(function() {
         $("#tableField").css('height', (window.innerHeight - 130)+'px');
@@ -82,6 +85,10 @@
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
     </fieldset>
   </div>
+</div>
+<div id="loadingDialog" title="Загрузка">
+  <div class="progress-label">Загрузка БД...</div>
+  <div id="progressbar"></div>
 </div>
 </body>
 </html>

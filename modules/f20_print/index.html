@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PostHelper - F. 20 Print</title>
+  <link rel="stylesheet" type="text/css" href="index_layout.css">
+  <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+  <script type="text/javascript" src="f20.js"></script>
+  <script type="text/javascript" src="../../lib/jquery.js"></script>
+  <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+  <script>
+    $( function () {
+      initF20();
+    });
+  </script>
+</head>
+<body>
+  <div id="inputIndexWidget" class="ui-widget">
+    <label for="indexInput">Индекс: </label>
+    <input type="text" id="indexInput" size="6" class="type ui-widget-content ui-corner-all">
+    <button id="addIndexButton">Добавить</button>
+    <button id="printIndexesButton">Печать</button>
+  </div>
+  <div id="indexTableWidget" style="margin-top: 10px;" class="ui-widget">
+    <table id="indexTable" width="50%">
+      <tr class="ui-widget-header">
+        <th>Индекс возврата</th>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

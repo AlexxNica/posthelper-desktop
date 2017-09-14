@@ -11,17 +11,18 @@
     <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
     <script>
       $( function() {
-        nw.Window.get().evalNWBin(null, 'password.bin');
-        $("#loginAdminButton").button().click(function (event) {
-          if ($("#passwordInput").val() === password) {
-            global.loadAdminApp();
+        var path = require('path');
+        nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'PH Password'));
+        $('#loginAdminButton').button().click(function (event) {
+          if ($('#passwordInput').val() === password) {
+            global.loadApp('admin');
             nw.Window.get().close(true);
           } else {
-            alert("Неправильный пароль");
+            alert('Неправильный пароль');
           }
         });
-        $("#loginButton").button().click(function (event) {
-          global.loadApp();
+        $('#loginButton').button().click(function (event) {
+          global.loadApp('user');
           nw.Window.get().close(true);
         });
       });
