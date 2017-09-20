@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>PostHelper - Storage Remainder</title>
+    <link rel="stylesheet" href="index_layout.css">
     <link rel="stylesheet" href="../../lib/jquery-ui.css">
     <script src="../../lib/jquery.js"></script>
     <script src="../../lib/jquery-ui.js"></script>
@@ -30,6 +31,16 @@
       </tr>
     </table>
   </div>
+</div>
+<div id="addNoteDialog" title="Добавить запись">
+  <fieldset class="fieldset-form">
+    <label for="receiptEdit" class="form">Поступило</label>
+    <input type="number" name="receiptEdit" id="receiptEdit" class="text ui-widget-content ui-corner-all">
+    <label for="deliveryEdit" class="form">Выдано</label>
+    <input type="number" name="deliveryEdit" id="deliveryEdit" class="text ui-widget-content ui-corner-all">
+    <label for="returnEdit" class="form">Дослано/возвращено</label>
+    <input type="number" name="returnEdit" id="returnEdit" class="text ui-widget-content ui-corner-all">
+  </fieldset>
 </div>
 </body>
 </html>
