@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PostHelper - Storage Remainder</title>
+    <link rel="stylesheet" href="../../lib/jquery-ui.css">
+    <script src="../../lib/jquery.js"></script>
+    <script src="../../lib/jquery-ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+      $( () => {
+        moduleInit();
+      });
+    </script>
+  </head>
+<body>
+<div class="widget">
+  <button id="addNoteButton">Добавить</button>
+</div>
+<div class="ui-widget">
+  <div id="notesTableField">
+    <table id="notesTable" class="ui-widget ui-widget-content" width="70%">
+      <tr class="ui-widget-header">
+        <th width="10%">Дата</th>
+        <th>Остаток</th>
+        <th>Поступило</th>
+        <th>Выдано</th>
+        <th>Досыл/возврат</th>
+        <th>Остаток</th>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>
