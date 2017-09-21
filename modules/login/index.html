@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="layout.css">
-    <script type="text/javascript" src="../../lib/jquery.js"></script>
-    <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="../../lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.js"></script>
     <script>
       $( function() {
         var path = require('path');
@@ -42,10 +42,10 @@
       <i>не несет ответственности</i> за их своевременное исправление.
     </div>
     <script>
-    var gui = require('nw.gui');
-    onload = function() {
-      gui.Window.get().show();
-    }
-</script>
+      var gui = require('nw.gui');
+      onload = function() {
+        gui.Window.get().show();
+      }
+    </script>
   </body>
 </html>
