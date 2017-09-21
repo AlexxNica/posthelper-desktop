@@ -189,7 +189,7 @@ function sendData() {
       adrList.push(toPush);
     }
   }
-  nw.Window.open('modules/packet_print/print.html', {'width': 1366, 'height': 768}, function(win) {
+  nw.Window.open('modules/packet-print/print.html', { show: false }, function(win) {
     win.maximize();
     // data is the list
     win.window.data = adrList;

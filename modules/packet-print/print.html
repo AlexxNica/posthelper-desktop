@@ -84,5 +84,11 @@
   }
   window.print();
 </script>
+<script>
+  var gui = require('nw.gui');
+  onload = function() {
+    gui.Window.get().show();
+  }
+</script>
 </body>
 </html>
