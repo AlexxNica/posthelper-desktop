@@ -1,6 +1,13 @@
 const dialogs = {};
+const databases = {};
 
 function moduleInit() {
+
+  databases.remainders = openDatabase('storage-remainder', '1', '', 1024 * 1024);
+
+  if (databases.remainders) {
+    console.log('Database loaded');
+  }
   
   $('#addNoteButton').button().click( (event) => {
     alert('Не создано сохранение');

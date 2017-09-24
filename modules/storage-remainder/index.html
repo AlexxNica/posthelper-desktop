@@ -10,6 +10,13 @@
     <script src="main.js"></script>
     <script>
       $( () => {
+        $(window).bind('beforeunload', function() {
+          return 'При закрытии модуля все несохраненные изменения будут потеряны.';
+        });
+        $("#notesTableField").css('height', (window.innerHeight - 60)+'px');
+        $(window).resize(function() {
+          $("#notesTableField").css('height', (window.innerHeight - 60)+'px');
+        });
         moduleInit();
       });
     </script>
@@ -19,8 +26,8 @@
   <button id="addNoteButton">Добавить</button>
 </div>
 <div class="ui-widget">
-  <div id="notesTableField">
-    <table id="notesTable" class="ui-widget ui-widget-content" width="70%">
+  <div id="notesTableField" style="overflow-y: scroll; height: 100%; margin-top: 10px;" class="ui-widget">
+    <table id="notesTable" class="ui-widget ui-widget-content" width="100%">
       <tr class="ui-widget-header">
         <th width="10%">Дата</th>
         <th>Остаток</th>
