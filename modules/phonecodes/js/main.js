@@ -8,7 +8,7 @@ function getCarrier(code) {
 }
 
 function phoneCodesTabInit() {
-  $.getJSON("carriers.json", function(data) {
+  $.getJSON("res/carriers.json", function(data) {
     dict = data;
   })
   .fail(function(){

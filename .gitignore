@@ -1,6 +1,6 @@
-/modules/packet_print/logo.svg
-/modules/packet_print/logo.png
+/modules/packet-print/img/logo.svg
+/modules/packet-print/img/logo.png
 v8.log
-/modules/f20_print/pechkin.ttf
+/modules/f20-print/fonts/pechkin.ttf
 .eslintrc.json
 package-lock.json
