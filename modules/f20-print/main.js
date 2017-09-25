@@ -16,7 +16,7 @@ function sendToPrint() {
       indexList.push(toPush);
     }
   }
-  nw.Window.open('modules/f20_print/print.html', {}, function(win) {
+  nw.Window.open('modules/f20-print/print.html', {}, function(win) {
     win.maximize();
     // data is the list
     win.window.data = indexList;

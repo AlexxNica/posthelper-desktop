@@ -92,7 +92,7 @@ function loadApp(usertype) {
     developmentTestsMenu.append(new nw.MenuItem({
       label: 'colresizable',
       click: () => {
-        win.window.location.href = 'tests/colresizable/link.html';
+        win.window.location.href = 'tests/colresizable/index.html';
       }
     }));
     developmentTestsMenu.append(new nw.MenuItem({
