@@ -62,14 +62,18 @@ function selectAddress(name) {
 
 function printBlank() {
   var now = new Date();
-  var stampCode = '<div class="stamp">' +
-    now.toStringF() + 'г.<br>' +
-    now.toStringT() +
-    '<br><div class="postcode"><b>' +
-    global.config.postCode +
-    '</b></div><br>ОПС<br><div class="postname">' +
-    global.config.postName +
-    '</div></div>';
+  var stampCode = 
+    `<div class="stamp">
+      ${now.toStringF()}г.<br>
+      ${now.toStringT()}<br>
+      <div class="postcode">
+        <b>${global.config.postCode}</b>
+      </div><br>
+      ОПС<br>
+      <div class="postname">
+        ${global.config.postName}
+      </div>
+    </div>`;
   for (var i = 0; i <= 3; ++i) {
     adrList.push(['','_____________________','______________', stampCode]);
   }
@@ -115,14 +119,18 @@ function addElement() {
   var now = new Date();
 
   // generate timestamp
-  var stampCode = '<div class="stamp">' +
-    now.toStringF() + 'г.<br>' +
-    now.toStringT() +
-    '<br><div class="postcode"><b>' +
-    global.config.postCode +
-    '</b></div><br>ОПС<br><div class="postname">' +
-    global.config.postName +
-    '</div></div>';
+  var stampCode = 
+    `<div class="stamp">
+      ${now.toStringF()}г.<br>
+      ${now.toStringT()}<br>
+      <div class="postcode">
+        <b>${global.config.postCode}</b>
+      </div><br>
+      ОПС<br>
+      <div class="postname">
+        ${global.config.postName}
+      </div>
+    </div>`;
 
   adrList.push(
     [
@@ -137,11 +145,11 @@ function addElement() {
 
   // add it to html
   adrListDocument.append(
-    '<tr><td>' +
-    adrList[count][0] + '</td><td onclick="editPacket(' + count + ')">' +
-    adrList[count][1] + '</td><td>' +
-    adrList[count][2] +
-    '</td></tr>'
+    `<tr>
+      <td>${adrList[count][0]}</td>
+      <td onclick="editPacket(${count})">${adrList[count][1]}</td>
+      <td>${adrList[count][2]}</td>
+    </tr>`
   );
 
   count++;
@@ -230,11 +238,11 @@ function rebuildTable() {
   adrListDocument.find('td').parent().remove();
   for (var item = 0; item < adrList.length; ++item) {
     adrListDocument.append(
-      '<tr><td>' +
-      adrList[item][0] + '</td><td onclick="editPacket(' + item + ')">' +
-      adrList[item][1] + '</td><td>' +
-      adrList[item][2] +
-      '</td></tr>'
+      `<tr>
+        <td>${adrList[item][0]}</td>
+        <td onclick="editPacket(${item})">${adrList[item][1]}</td>
+        <td>${adrList[item][2]}</td>
+      </tr>`
     );
   }
   $('table').colResizable();

@@ -32,48 +32,53 @@
       table.appendChild(pageObject.rows[i]);
     }
     for (var index = 0; index <= 5; index += 1) {
-      //pageObject.frontSides[index].innerHTML = `<div class="index">\`${indexList[index]}</div>`;
-      pageObject.frontSides[index].innerHTML = [
-        `<div class="container">`,
-          `<div class="f20">ф. 20</div>`,
-          `<div class="type">ВОЗВРАТ/<s>ДОСЫЛКА</s></div>`,
-          `<div class="tag"><img src="f20_tag.svg"></div>`,
-          `<div class="index">\`${indexList[index]}</div>`,
-        `</div>`
-      ].join('');
-      //pageObject.backSides[index].innerHTML = date.toDateString();
-      pageObject.backSides[index].innerHTML = [
-        `<div class="container">`,
-          `<div class="f20">ф. 20</div>`,
-          `<div class="return-cause">`,
-            `<b class="pad-small">Причина возврата:</b>`,
-            `<ul>`,
-              `<li>Заявление отправителя</li>`,
-              `<li>Отказ адресата от получения</li>`,
-              `<li>Отстутствие адресата <div class="pad-small">по указанному адресу</div></li>`,
-              `<li>Невозможно прочесть <div class="pad-small">адрес адресата</div></li>`,
-              `<li class="check">Истек срок хранения</li>`,
-            `</ul>`,
-          `</div>`,
-          `<div class="separator"></div>`,
-          `<div class="resend-cause">`,
-            `<b class="pad-small">Причина досылки:</b>`,
-            `<ul>`,
-              `<li>Заявление пользователя</li>`,
-              `<li>Засылка</li>`,
-            `</ul>`,
-          `</div>`,
-          `<div class="other">`,
-            `<ul>`,
-              `<li>Иные обстоятельства___________________</li>`,
-            `</ul>`,
-          `</div>`,
-          `<div class="sign"><b>Сотрудник ОПС</b>____________________________</div>`,
-          `<div class="timestamp">`,
-            `${date.toStringF()}г.<br>${date.toStringT()}<br><div class="postcode"><b>${global.config.postCode}</b></div><br>ОПС<br><div class="postname">${global.config.postName}</div>`,
-          `</div>`,
-        `</div>`
-      ].join('');
+
+      pageObject.frontSides[index].innerHTML = 
+        `<div class="container">
+          <div class="f20">ф. 20</div>
+          <div class="type">ВОЗВРАТ/<s>ДОСЫЛКА</s></div>
+          <div class="tag"><img src="f20_tag.svg"></div>
+          <div class="index">\`${indexList[index]}</div>
+        </div>`;
+
+      pageObject.backSides[index].innerHTML =
+        `<div class="container">
+          <div class="f20">ф. 20</div>
+          <div class="return-cause">
+            <b class="pad-small">Причина возврата:</b>
+            <ul>
+              <li>Заявление отправителя</li>
+              <li>Отказ адресата от получения</li>
+              <li>Отстутствие адресата <div class="pad-small">по указанному адресу</div></li>
+              <li>Невозможно прочесть <div class="pad-small">адрес адресата</div></li>
+              <li class="check">Истек срок хранения</li>
+            </ul>
+          </div>
+          <div class="separator"></div>
+          <div class="resend-cause">
+            <b class="pad-small">Причина досылки:</b>
+            <ul>
+              <li>Заявление пользователя</li>
+              <li>Засылка</li>
+            </ul>
+          </div>
+          <div class="other">
+            <ul>
+              <li>Иные обстоятельства___________________</li>
+            </ul>
+          </div>
+          <div class="sign"><b>Сотрудник ОПС</b>____________________________</div>
+          <div class="timestamp">
+            ${date.toStringF()}г.<br>
+            ${date.toStringT()}<br>
+            <div class="postcode">
+              <b>${global.config.postCode}</b>
+            </div><br>
+            ОПС<br>
+            <div class="postname">${global.config.postName}</div>
+          </div>
+        </div>`;
+        
       pageObject.rows[index].appendChild(pageObject.frontSides[index]);
       pageObject.rows[index].appendChild(pageObject.backSides[index]);
     }
