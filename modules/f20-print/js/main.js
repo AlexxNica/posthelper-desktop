@@ -1,35 +1,39 @@
-var indexList = [];
+const documents = {
+  indexList: []
+};
 
-var indexInput;
-var indexTableDocument;
+const elements = {
+  indexInput: null,
+  indexTable: null
+};
 
 function addIndex() {
-  var index = indexInput.val();
-  indexList.push(index);
-  indexTableDocument.append('<tr><td>' + index + '</td></tr>');
+  const index = elements.indexInput.val();
+  documents.indexList.push(index);
+  elements.indexTable.append('<tr><td>' + index + '</td></tr>');
 }
 
 function sendToPrint() {
-  var toPush = '';
-  if (indexList.length % 6 !== 0) {
-    while (indexList.length % 6 !== 0) {
-      indexList.push(toPush);
+  const toPush = '';
+  if (documents.indexList.length % 6 !== 0) {
+    while (documents.indexList.length % 6 !== 0) {
+      documents.indexList.push(toPush);
     }
   }
-  nw.Window.open('modules/f20-print/html/print.html', {}, function(win) {
+  nw.Window.open('modules/f20-print/html/print.html', {}, (win) => {
     win.maximize();
     // data is the list
-    win.window.data = indexList;
+    win.window.data = documents.indexList;
   });
 }
 
 function initF20() {
-  indexInput = $('#indexInput');
-  indexTableDocument = $('#indexTable');
-  $('#addIndexButton').button().click( function (event) {
+  elements.indexInput = $('#indexInput');
+  elements.indexTable = $('#indexTable');
+  $('#addIndexButton').button().click((event) => {
     addIndex();
   });
-  $('#printIndexesButton').button().click( function (event) {
+  $('#printIndexesButton').button().click((event) => {
     sendToPrint();
   });
 }

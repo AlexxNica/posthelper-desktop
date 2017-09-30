@@ -23,7 +23,7 @@ function rebuildTable() {
 
 function updateList() {
   documents.notesList = [];
-  databases.remainders.transaction( (tx) => {
+  databases.remainders.transaction((tx) => {
     tx.executeSql(
       'SELECT * from remainders DESC LIMIT 10',
       [],
@@ -46,7 +46,7 @@ function updateList() {
 }
 
 function addNote(remainder, receipt, delivery, returned) {
-  databases.remainders.transaction( (tx) => {
+  databases.remainders.transaction((tx) => {
     tx.executeSql(
       `INSERT INTO remainders 
         (date, startRemainder, receipt, delivery, return, endRemainder) 
@@ -75,7 +75,7 @@ function moduleInit() {
   documents.notesList = [];
   updateList();
   
-  $('#addNoteButton').button().click( (event) => {
+  $('#addNoteButton').button().click((event) => {
     alert('Не создано сохранение');
     elements.dialogs.addNote.dialog('open');
   });

@@ -1,25 +1,27 @@
-var dict;
+const documents = {
+  dictionary: []
+}
 
 function getCarrier(code) {
-  if (dict[code] === undefined) {
+  if (documents.dictionary[code] === undefined) {
     return "Не найдено";
   }
-  return dict[code];
+  return documents.dictionary[code];
 }
 
 function phoneCodesTabInit() {
-  $.getJSON("res/carriers.json", function(data) {
-    dict = data;
+  $.getJSON("res/carriers.json", (data) => {
+    documents.dictionary = data;
   })
-  .fail(function(){
+  .fail(() => {
     $("#inputCodeWidget").html("<i>Ошибка загрузки базы данных</i>");
   });
 
-  $("#findCodeButton").button().click(function (event) {
+  $("#findCodeButton").button().click((event) => {
     $("#carrierOutput").html(getCarrier($("#codeInput").val()));
   });
 
-  var availableCodes = [
+  const availableCodes = [
     "900",
     "911",
     "921",

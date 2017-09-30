@@ -10,10 +10,10 @@
     <script type="text/javascript" src="../../lib/jquery/jquery.js"></script>
     <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.js"></script>
     <script>
-      $( function() {
-        var path = require('path');
+      $(() => {
+        const path = require('path');
         nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'PH Password'));
-        $('#loginAdminButton').button().click(function (event) {
+        $('#loginAdminButton').button().click((event) => {
           if ($('#passwordInput').val() === password) {
             global.loadApp('admin');
             nw.Window.get().close(true);
@@ -21,7 +21,7 @@
             alert('Неправильный пароль');
           }
         });
-        $('#loginButton').button().click(function (event) {
+        $('#loginButton').button().click((event) => {
           global.loadApp('user');
           nw.Window.get().close(true);
         });
@@ -42,8 +42,8 @@
       <i>не несет ответственности</i> за их своевременное исправление.
     </div>
     <script>
-      var gui = require('nw.gui');
-      onload = function() {
+      const gui = require('nw.gui');
+      onload = () => {
         gui.Window.get().show();
       }
     </script>
