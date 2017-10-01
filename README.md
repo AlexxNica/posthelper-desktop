@@ -9,7 +9,10 @@ Extended version of PostHelper based on NW.js
     * name and address autocomplete
     * saving waybills
     * checking service area
+* Form 20 print
 
 # ToDo:
-* Form 20 print
+* storage remainders calculation
+* improvements of F20 layouting
+* (?) cash issue note making
 * (?) statistics module
