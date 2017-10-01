@@ -14,14 +14,14 @@
   <script type="text/javascript" src="js/main.js"></script>
   <script type="text/javascript">
     $( function() {
-      $(window).bind('beforeunload', function() {
+      $(window).bind('beforeunload', () => {
         return 'При закрытии модуля все несохраненные изменения будут потеряны.';
       });
       $("#tableField").css('height', (window.innerHeight - 130)+'px');
-      $(window).resize(function() {
+      $(window).resize(() => {
         $("#tableField").css('height', (window.innerHeight - 130)+'px');
       });
-      packetPrintTabInit();
+      moduleInit();
     });
   </script>
 </head>

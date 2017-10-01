@@ -3,11 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 try {
-  const configFile = fs.readFileSync(path.join(nw.App.dataPath, '/PH Configuration'), 'utf-8');
+  const configFile = fs.readFileSync(path.join(nw.App.dataPath, 'PH Configuration'), 'utf-8');
   global.config = JSON.parse(configFile);
   nw.Window.open('modules/login/index.html', { 'show': false });
 } catch (e) {
-  alert('Ошибка: не найден файл конфигурации');
+  alert('Ошибка: не найден файл конфигурации\n\n' + e.stack);
   nw.Window.open('', { show: false });
   nw.App.quit();
 }

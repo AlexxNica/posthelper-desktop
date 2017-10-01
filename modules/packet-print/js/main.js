@@ -4,38 +4,40 @@
 /** @namespace global.config.postName */
 
 // requiring libs
-var path = require('path');
-var sql = require('sqlite-cipher');
+const path = require('path');
+const sql = require('sqlite-cipher');
 
-var db; // database object
-var adrList = []; // array contains packets
-var addressString; // field for address
-var availableStreets; // array for street autocomplete
-var availableNames = []; // array for name autocomplete
-var count = 0; // counter of packets in the waybil
-var isInDB = false; // flag for checking name db selection
-var editDialog; // object for jqueryui edit window
-var numberToEdit = 0; // element for editing
+let isInDB = false;
+let addressDatabaseKey;
 
-// input fields
-var adrLetterInput;
-var adrNumberInput;
-var adrNameInput;
-var adrAddressStreetInput;
-var adrAddressBuildingInput;
-var adrAddressApartmentInput;
-
-// list
-var adrListDocument;
+const elements = {
+  quantityOutput: null,
+  letterInput: null,
+  numberInput: null,
+  nameInput: null,
+  streetInput: null,
+  buildingInput: null,
+  apartmentInput: null,
+  packetsTable: null
+};
+const documents = {
+  availableNames: [],
+  availableStreets: [],
+  packetsList: []
+};
+const dialogs = {
+  loading: null,
+  editPacket: null
+};
 
 function selectAddress(name) {
-  var query = 'SELECT address FROM addresses WHERE name LIKE ?';
+  const query = 'SELECT address FROM addresses WHERE name LIKE ?';
   sql.runAsync(
     query,
     [name],
-    function (rows) {
+    (rows) => {
       try {
-        var address = rows[0].address.match(/[\wа-я]+/gi);
+        const address = rows[0].address.match(/[\wа-я]+/gi);
         // check for two-word street name
         if (address[1].search(/^[0-9].*$/) !== 0) { // 1 is the second word
           address[0] = address[0] + ' ' + address[1]; // compile it again
@@ -43,15 +45,11 @@ function selectAddress(name) {
           address[1] = address[2];
           address[2] = address[3];
         }
-        adrAddressStreetInput.val(address[0]);
-        adrAddressBuildingInput.val(address[1]);
-        adrAddressApartmentInput.val(address[2]);
+        elements.streetInput.val(address[0]);
+        elements.buildingInput.val(address[1]);
+        elements.apartmentInput.val(address[2]);
+        $('#adrAddressApartment').focus();
         isInDB = true;
-        if (isInDB) {
-          document.getElementById('adrAddressApartment').focus();
-        } else {
-          document.getElementById('adrAddressStreet').focus();
-        }
       }
       catch (e) {
         isInDB = false;
@@ -61,8 +59,8 @@ function selectAddress(name) {
 }
 
 function printBlank() {
-  var now = new Date();
-  var stampCode = 
+  const now = new Date();
+  const stampCode = 
     `<div class="stamp">
       ${now.toStringF()}г.<br>
       ${now.toStringT()}<br>
@@ -74,18 +72,22 @@ function printBlank() {
         ${global.config.postName}
       </div>
     </div>`;
-  for (var i = 0; i <= 3; ++i) {
-    adrList.push(['','_____________________','______________', stampCode]);
+  for (let index = 0; index <= 3; ++index) {
+    adrList.push({
+      number: '',
+      name: '_____________________',
+      address: '______________',
+      timestamp: stampCode
+    });
   }
   sendData();
 }
 
 function compileAddress() {
-  addressString =
-    adrAddressStreetInput.val() + ' ' +
-    adrAddressBuildingInput.val() + '-' +
-    adrAddressApartmentInput.val()
-  ;
+  const street = elements.streetInput.val();
+  const building = elements.buildingInput.val();
+  const apartment = elements.apartmentInput.val();
+  return `${street} ${building}-${apartment}`;
 }
 
 function addElement() {
@@ -94,32 +96,30 @@ function addElement() {
 
   // check for count limit
 
-  if (count >= 48) {
+  if (documents.packetsList.length >= 48) {
     alert('Досигнут максимум вложений в список.\nДля продолжения создайте новый список.');
     return;
   }
-
-  compileAddress();
 
   // check for dd
 
   if (!isInDB) {
     // capitalize first letters of the name
-    var name = adrNameInput.val().split(' ').map(function(el) {
-      return el.charAt(0).toUpperCase() + el.slice(1);
+    const name = elements.nameInput.val().split(' ').map((element) => {
+      return element.charAt(0).toUpperCase() + element.slice(1);
     }).join(' ');
     sql.run(
       'INSERT INTO addresses (name, address) VALUES (?,?)',
-      [name, addressString]
+      [name, compileAddress()]
     );
   }
 
   // add new record for the list
 
-  var now = new Date();
+  const now = new Date();
 
   // generate timestamp
-  var stampCode = 
+  const stampCode = 
     `<div class="stamp">
       ${now.toStringF()}г.<br>
       ${now.toStringT()}<br>
@@ -132,116 +132,124 @@ function addElement() {
       </div>
     </div>`;
 
-  adrList.push(
-    [
-      adrLetterInput.val() + adrNumberInput.val(), // number (with letter)
-      adrNameInput.val().split(' ').map(function(el) { // capitalized name
-        return el.charAt(0).toUpperCase() + el.slice(1);
-      }).join(' '),
-      addressString, // address
-      stampCode // timestamp
-    ]
-  );
+  const packetNumber = elements.letterInput.val() + elements.numberInput.val();
+  const packetName = elements.nameInput.val().split(' ').map((element) => {
+    return element.charAt(0).toUpperCase() + element.slice(1);
+  }).join(' ');
+  const packetAddress = compileAddress();
+  const packetTimestamp = stampCode;
+  
+  documents.packetsList.push({
+    number: packetNumber,
+    name: packetName,
+    address: packetAddress,
+    timestamp: stampCode
+  });
+
+  const quantity = documents.packetsList.length
+  const documentNumber = quantity - 1;
 
   // add it to html
-  adrListDocument.append(
+  elements.packetsTable.append(
     `<tr>
-      <td>${adrList[count][0]}</td>
-      <td onclick="editPacket(${count})">${adrList[count][1]}</td>
-      <td>${adrList[count][2]}</td>
+      <td>${packetNumber}</td>
+      <td onclick="editPacket(${documentNumber})">${packetName}</td>
+      <td>${packetAddress}</td>
     </tr>`
   );
 
-  count++;
-  $('#scoreOutput').html(count);
-  adrNameInput.focus();
+  elements.quantityOutput.html(documents.packetsList.length);
+  elements.nameInput.focus();
 
   // reset val to defaults
-  if (adrNumberInput.val() !== '') {
+  if (elements.numberInput.val() !== '') {
     // increment item number
-    adrNumberInput.val( parseInt(adrNumberInput.val()) + 1 );
+    elements.numberInput.val(parseInt(elements.numberInput.val()) + 1);
   } else {
-    adrNumberInput.val('');
+    elements.numberInput.val('');
   }
-  adrNameInput.val('');
-  adrAddressStreetInput.val('');
-  adrAddressBuildingInput.val('');
-  adrAddressApartmentInput.val('');
+  elements.nameInput.val('');
+  elements.streetInput.val('');
+  elements.buildingInput.val('');
+  elements.apartmentInput.val('');
 
   isInDB = false;
 
-  if (count === 48) {
+  if (documents.packetsList.length === 48) {
     alert('Досигнут максимум вложений в список.\nДля продолжения создайте новый список.');
   }
 }
 
 function sendData() {
-  var toPush; // placeholder for empty positions
+  let toPush; // placeholder for empty positions
   if ($('#noNumRadio').is(':checked')) {
-    toPush = [
-      '',
-      '_____________________','______________',
-      '<div class="stamp"></div>'
-    ];
+    toPush = {
+      number: '',
+      name: '_____________________',
+      address: '______________',
+      timestamp: '<div class="stamp"></div>'
+    };
   } else {
-    toPush = [
-      '____',
-      '_____________________',
-      '______________',
-      '<div class="stamp"></div>'
-    ];
+    toPush = {
+      number: '____',
+      name: '_____________________',
+      address: '______________',
+      timestamp: '<div class="stamp"></div>'
+    };
   }
   // fill spaces in the notifications form
-  if (adrList.length % 4 !== 0) {
-    while (adrList.length % 4 !== 0) {
-      adrList.push(toPush);
+  if (documents.packetsList.length % 4 !== 0) {
+    while (documents.packetsList.length % 4 !== 0) {
+      documents.packetsList.push(toPush);
     }
   }
-  nw.Window.open('modules/packet-print/html/print.html', { show: false }, function(win) {
+  nw.Window.open('modules/packet-print/html/print.new.html', { show: false }, (win) => {
     win.maximize();
     // data is the list
-    win.window.data = adrList;
+    win.window.data = documents.packetsList;
   });
 }
 
 function saveWaybill() {
-  var now = new Date();
-  var waybill = JSON.stringify(adrList);
-  var blob = new Blob([waybill], {type: 'application/json'});
+  const now = new Date();
+  const waybill = JSON.stringify(documents.packetsList);
+  const blob = new Blob([waybill], {type: 'application/json'});
   // name contains month and day of creating waybill
-  var filename = 'packets' + now.toStringFShort() + '.json';
+  const filename = 'packets' + now.toStringFShort() + '.json';
   saveAs(blob, filename);
 }
 
 function loadWaybill () {
   //$('#file-input').trigger('click');
-  var file = $('#file-input').get(0).files[0];
+  const file = $('#file-input').get(0).files[0];
   if (file.name.match(/\.(txt|json)$/)) {
-    var reader = new FileReader();
-    reader.onload = function() {
+    const reader = new FileReader();
+    reader.onload = () => {
       //console.log(reader.result);
       $('#packetTypeSelect').hide();
       $('#packetList').show();
       //noinspection JSCheckFunctionSignatures
-      adrList = JSON.parse(reader.result);
-      count = adrList.length;
+      documents.packetsList = JSON.parse(reader.result);
+      elements.quantityOutput.html(documents.packetsList.length);
       rebuildTable();
-      $('#scoreOutput').html(count);
     };
     reader.readAsText(file);
   } else {
-    alert('File not supported, .txt or .json files only');
+    alert('Ошибка: неправильный формат файла');
   }
 }
 
 function rebuildTable() {
-  adrListDocument.find('td').parent().remove();
-  for (var item = 0; item < adrList.length; ++item) {
-    adrListDocument.append(
+  elements.packetsTable.find('td').parent().remove();
+  for (let index = 0; index < documents.packetsList.length; ++index) {
+    const number = documents.packetsList[index].number;
+    const name = documents.packetsList[index].name;
+    const address = documents.packetsList[index].address;
+    elements.packetsTable.append(
       `<tr>
-        <td>${adrList[item][0]}</td>
-        <td onclick="editPacket(${item})">${adrList[item][1]}</td>
-        <td>${adrList[item][2]}</td>
+        <td>${number}</td>
+        <td onclick="editPacket(${index})">${name}</td>
+        <td>${address}</td>
       </tr>`
     );
   }
@@ -249,10 +257,11 @@ function rebuildTable() {
 }
 
 function editPacket(number) {
-  numberToEdit = number;
   editDialog.dialog('open');
-  $('#nameEdit').val(adrList[number][1]);
-  $('#addressEdit').val(adrList[number][2]);
+  const name = documents.packetsList[number].name;
+  const address = documents.packetsList[number].address;
+  $('#nameEdit').val(name);
+  $('#addressEdit').val(address);
 }
 
 function changeField(event) {
@@ -266,9 +275,9 @@ function changeField(event) {
   }
 }
 
-function packetPrintTabInit() {
+function moduleInit() {
 
-  $('#loadingDialog').dialog({
+  dialogs.loading = $('#loadingDialog').dialog({
     autoOpen: false,
     closeOnEscape: false,
     resizable: false
@@ -285,26 +294,28 @@ function packetPrintTabInit() {
   $('#loadingDialog').dialog('open');
 
   // config loading
-  availableStreets = global.config.streets;
+  documents.availableStreets = global.config.streets;
 
   // db loading
-  availableNames.splice(0, availableNames.length);
-  nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Key'));
+  documents.availableNames.splice(0, documents.availableNames.length);
   try {
-    if (key !== undefined) {
-      //alert("Access granted");
-    }
+    nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Keys'));
   } catch (e) {
-    alert('Key file not found');
+    alert('Ошибка: не найден файл ключа\n\n' + e.stack);
     return;
   }
-  var dbpath = path.join(nw.App.dataPath, 'Address Database');
-  sql.connect(dbpath, key, 'aes-256-ctr');
+  const databasePath = path.join(nw.App.dataPath, 'Address Database');
+  try {
+    sql.connect(databasePath, addressDatabaseKey, 'aes-256-ctr');
+  } catch (e) {
+    alert('Ошибка: нет соединения с БД\n\n' + e.stack);
+    return;
+  }
   sql.runAsync(
     'SELECT name FROM addresses',
-    function (rows) {
-      for (var i = 0; i < rows.length; ++i) {
-        availableNames.push(rows[i].name);
+    (rows) => {
+      for (let i = 0; i < rows.length; ++i) {
+        documents.availableNames.push(rows[i].name);
       }
     }
   );
@@ -314,45 +325,45 @@ function packetPrintTabInit() {
   console.log('Database loaded');
 
   // set ediiting dialog properties
-  editDialog = $('#editDialog').dialog({
+  dialogs.editPacket = $('#editDialog').dialog({
     autoOpen: false,
     height: 400,
     width: 350,
     modal: true,
     buttons: {
-      Удалить: function () {
+      Удалить: () => {
         if (confirm('Вы действительно хотите удалить данную позицию?')) {
-          adrList.splice(numberToEdit, 1);
-          count = adrList.length;
+          documents.packetsList.splice(numberToEdit, 1);
           rebuildTable();
-          $('#scoreOutput').html(count);
-          editDialog.dialog('close');
+          elements.quantityOutput.html(documents.packetsList.length);
+          dialogs.editPacket.dialog('close');
         }
       },
-      Сохранить: function() {
-        adrList[numberToEdit][1] = $('#nameEdit').val();
-        adrList[numberToEdit][2] = $('#addressEdit').val();
+      Сохранить: () => {
+        documents.packetsList[numberToEdit][1] = $('#nameEdit').val();
+        documents.packetsList[numberToEdit][2] = $('#addressEdit').val();
         rebuildTable();
-        editDialog.dialog('close');
+        dialogs.editPacket.dialog('close');
       },
-      Отмена: function() {
-        editDialog.dialog( 'close' );
+      Отмена: () => {
+        dialogs.editPacket.dialog( 'close' );
       }
     }
   });
 
   // initialize interface elements
-  adrLetterInput = $('#adrLetter');
-  adrNumberInput = $('#adrNumber');
-  adrNameInput = $('#adrName');
-  adrAddressStreetInput = $('#adrAddressStreet');
-  adrAddressBuildingInput = $('#adrAddressBuilding');
-  adrAddressApartmentInput = $('#adrAddressApartment');
-  adrListDocument = $('#adrList');
+  elements.quantityOutput = $('#scoreOutput');
+  elements.letterInput = $('#adrLetter');
+  elements.numberInput = $('#adrNumber');
+  elements.nameInput = $('#adrName');
+  elements.streetInput = $('#adrAddressStreet');
+  elements.buildingInput = $('#adrAddressBuilding');
+  elements.apartmentInput = $('#adrAddressApartment');
+  elements.packetsTable = $('#adrList');
 
   $( 'input[type=\'radio\']' ).checkboxradio();
 
-  $('#selectTypeButton').button().click(function (event) {
+  $('#selectTypeButton').button().click((event) => {
     $('#packetTypeSelect').hide();
     if ($('#noNumRadio').is(':checked')) {
       $('#adrNumberLabel').hide();
@@ -362,45 +373,43 @@ function packetPrintTabInit() {
     $('#packetList').show();
   });
 
-  $('#loadWaybillButton').button().click(function (event) {
+  $('#loadWaybillButton').button().click((event) => {
     loadWaybill();
   });
 
-  adrNameInput.autocomplete({
-    source: function(request, response) {
-      var results = $.ui.autocomplete.filter(availableNames, request.term);
+  elements.nameInput.autocomplete({
+    source: (request, response) => {
+      const results = $.ui.autocomplete.filter(documents.availableNames, request.term);
       response(results.slice(0, 10));
     }
   });
 
-  adrAddressStreetInput.autocomplete({
-    source: availableStreets
+  elements.streetInput.autocomplete({
+    source: documents.availableStreets
   });
 
-  $('#addPacketButton').button().click(function (event) {
-    try {
-      if (global.config.area[adrAddressStreetInput.val()][adrAddressBuildingInput.val()] !== undefined) {
-        compileAddress();
-        if (confirm('Добавить данное вложение?\n' + adrNameInput.val() + '\n' + addressString)) {
-          addElement();
-        }
-      } else {
-        alert('Данный адрес не входит в участок отделения');
+  $('#addPacketButton').button().click((event) => {
+    const street = elements.streetInput.val();
+    const building = elements.buildingInput.val();
+    const name = elements.nameInput.val();
+    if (global.config.area[street][building] !== undefined) {
+      if (confirm('Добавить данное вложение?\n' + name + '\n' + compileAddress())) {
+        addElement();
       }
-    } catch (e) {
+    } else {
       alert('Данный адрес не входит в участок отделения');
     }
   });
 
-  $('#printPacketButton').button().click(function (event) {
+  $('#printPacketButton').button().click((event) => {
     sendData();
   });
 
-  $('#saveWaybillButton').button().click(function (event) {
+  $('#saveWaybillButton').button().click((event) => {
     saveWaybill();
   });
 
-  $('#printBlank').button().click(function (event) {
+  $('#printBlank').button().click((event) => {
     printBlank();
   });
 }
