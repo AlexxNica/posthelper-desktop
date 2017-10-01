@@ -257,11 +257,17 @@ function rebuildTable() {
 }
 
 function editPacket(number) {
-  editDialog.dialog('open');
+  dialogs.editPacket.numberToEdit = number;
+  dialogs.editPacket.dialog('open');
   const name = documents.packetsList[number].name;
   const address = documents.packetsList[number].address;
   $('#nameEdit').val(name);
   $('#addressEdit').val(address);
+}
+
+function savePacket(number) {
+  documents.packetsList[number].name = $('#nameEdit').val();
+  documents.packetsList[number].address = $('#addressEdit').val();
 }
 
 function changeField(event) {
@@ -333,15 +339,14 @@ function moduleInit() {
     buttons: {
       Удалить: () => {
         if (confirm('Вы действительно хотите удалить данную позицию?')) {
-          documents.packetsList.splice(numberToEdit, 1);
+          documents.packetsList.splice(dialogs.editPacket.numberToEdit, 1);
           rebuildTable();
           elements.quantityOutput.html(documents.packetsList.length);
           dialogs.editPacket.dialog('close');
         }
       },
       Сохранить: () => {
-        documents.packetsList[numberToEdit][1] = $('#nameEdit').val();
-        documents.packetsList[numberToEdit][2] = $('#addressEdit').val();
+        savePacket(dialogs.editPacket.numberToEdit);
         rebuildTable();
         dialogs.editPacket.dialog('close');
       },
