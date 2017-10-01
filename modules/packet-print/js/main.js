@@ -299,7 +299,7 @@ function moduleInit() {
   // db loading
   documents.availableNames.splice(0, documents.availableNames.length);
   try {
-    nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Keys'));
+    nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Key'));
   } catch (e) {
     alert('Ошибка: не найден файл ключа\n\n' + e.stack);
     return;
