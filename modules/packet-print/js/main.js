@@ -203,7 +203,7 @@ function sendData() {
       documents.packetsList.push(toPush);
     }
   }
-  nw.Window.open('modules/packet-print/html/print.new.html', { show: false }, (win) => {
+  nw.Window.open('modules/packet-print/html/print.html', { show: false }, (win) => {
     win.maximize();
     // data is the list
     win.window.data = documents.packetsList;
