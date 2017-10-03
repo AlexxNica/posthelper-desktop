@@ -137,8 +137,7 @@ function addElement() {
     return element.charAt(0).toUpperCase() + element.slice(1);
   }).join(' ');
   const packetAddress = compileAddress();
-  const packetTimestamp = stampCode;
-  
+
   documents.packetsList.push({
     number: packetNumber,
     name: packetName,
