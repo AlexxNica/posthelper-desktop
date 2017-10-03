@@ -1,9 +1,17 @@
 const elements = {
-  dialogs: {},
-  tables: {}
+  dialogs: {
+    addNote: null
+  },
+  tables: {
+    notes: null
+  }
 };
-const databases = {};
-const documents = {};
+const databases = {
+  remainders: null
+};
+const documents = {
+  notesList: []
+};
 
 function rebuildTable() {
   elements.tables.notes.find('td').parent().remove();
