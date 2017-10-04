@@ -306,14 +306,14 @@ function moduleInit() {
   try {
     nw.Window.get().evalNWBin(null, path.join(nw.App.dataPath, 'Address Database Key'));
   } catch (e) {
-    alert('Ошибка: не найден файл ключа\n\n' + e.stack);
+    alert('Ошибка: не найден файл ключа\n' + e.toString() + '\n\n' + e.stack);
     return;
   }
   const databasePath = path.join(nw.App.dataPath, 'Address Database');
   try {
     sql.connect(databasePath, addressDatabaseKey, 'aes-256-ctr');
   } catch (e) {
-    alert('Ошибка: нет соединения с БД\n\n' + e.stack);
+    alert('Ошибка: нет соединения с БД\n' + e.toString() +'\n\n' + e.stack);
     return;
   }
   sql.runAsync(

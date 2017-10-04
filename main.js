@@ -7,7 +7,7 @@ try {
   global.config = JSON.parse(configFile);
   nw.Window.open('modules/login/index.html', { 'show': false });
 } catch (e) {
-  alert('Ошибка: не найден файл конфигурации\n\n' + e.stack);
+  alert('Ошибка: не найден файл конфигурации\n' + e.toString() + '\n\n' + e.stack);
   nw.Window.open('', { show: false });
   nw.App.quit();
 }
