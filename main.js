@@ -113,6 +113,12 @@ function loadApp(usertype) {
         win.window.location.href = 'tests/statistics/index.html';
       }
     }));
+    developmentTestsMenu.append(new nw.MenuItem({
+      label: 'datatables test',
+      click: () => {
+        win.window.location.href = 'tests/datatables/index.html'
+      }
+    }));
 
     developmentMenu.append(new nw.MenuItem({
       label: 'Тесты',

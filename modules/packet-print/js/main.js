@@ -145,7 +145,7 @@ function addElement() {
     timestamp: stampCode
   });
 
-  const quantity = documents.packetsList.length
+  const quantity = documents.packetsList.length;
   const documentNumber = quantity - 1;
 
   // add it to html
@@ -296,7 +296,7 @@ function moduleInit() {
   $('#packetTypeSelect').hide();
   $('#packetList').hide();
 
-  $('#loadingDialog').dialog('open');
+  dialogs.loading.dialog('open');
 
   // config loading
   documents.availableStreets = global.config.streets;
@@ -325,7 +325,7 @@ function moduleInit() {
     }
   );
   //alert("db loaded");
-  $('#loadingDialog').dialog('close');
+  dialogs.loading.dialog('close');
   $('#packetTypeSelect').show();
   console.log('Database loaded');
 
