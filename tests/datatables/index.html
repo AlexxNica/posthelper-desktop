@@ -3,73 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>datatables test</title>
+  <link rel="stylesheet" href="layout.css">
   <link rel="stylesheet" href="../../lib/jquery-ui/jquery-ui.css">
   <link rel="stylesheet" href="../../lib/datatables/datatables.css">
   <script src="../../lib/jquery/jquery.js"></script>
   <script src="../../lib/jquery-ui/jquery-ui.js"></script>
   <script src="../../lib/datatables/datatables.js"></script>
+  <script src="main.js"></script>
   <script>
     $(() => {
-      const table = $('#example').DataTable({
-        language: {
-          "processing": "Подождите...",
-          "search": "Поиск:",
-          "lengthMenu": "Показать _MENU_ записей",
-          "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-          "infoEmpty": "Записи с 0 до 0 из 0 записей",
-          "infoFiltered": "(отфильтровано из _MAX_ записей)",
-          "infoPostFix": "",
-          "loadingRecords": "Загрузка записей...",
-          "zeroRecords": "Записи отсутствуют.",
-          "emptyTable": "В таблице отсутствуют данные",
-          "paginate": {
-            "first": "Первая",
-            "previous": "Предыдущая",
-            "next": "Следующая",
-            "last": "Последняя"
-          },
-          "aria": {
-            "sortAscending": ": активировать для сортировки столбца по возрастанию",
-            "sortDescending": ": активировать для сортировки столбца по убыванию"
-          }
-        },
-        rowId: 'ID',
-        scrollY: 300,
-        paging: false
-      });
-      $('#example').find('tbody').on('click', 'tr', function () {
-        alert( table.row( this ).data() );
-      } );
-      $('#addButton').button().click((event) => {
-        table.row.add([
-          $('#numberInput').val(),
-          $('#nameInput').val(),
-          $('#addressInput').val()
-        ]).draw(false);
-      });
-      $('#sendButton').button().click((event) => {
-        const tableData = table.rows().data();
-        const data = [];
-        for (let index = 0; index < tableData.length; ++index) {
-          data.push({
-            number: tableData[index][0],
-            name: tableData[index][1],
-            address: tableData[index][2]
-          });
-        }
-        console.log(data);
-      })
+      initModule();
     });
   </script>
 </head>
 <body>
-<div class="ui-widget">
+<div class="ui-widget" style="margin-bottom: 10px;">
   <label for="numberInput">Номер:</label>
-  <input type="text" id="numberInput" size="3" class="ui-widget-content ui-corner-all">
+  <input type="text" id="numberInput" size="3" class="type ui-widget-content ui-corner-all">
   <label for="nameInput">Имя:</label>
-  <input type="text" id="nameInput" size="40" class="ui-widget-content ui-corner-all">
-  <label for="addressInput">Адрес</label>
-  <input type="text" id="addressInput" size="30" class="ui-widget-content ui-corner-all">
+  <input type="text" id="nameInput" size="40" class="type ui-widget-content ui-corner-all">
+  <label for="addressInput">Адрес:</label>
+  <input type="text" id="addressInput" size="30" class="type ui-widget-content ui-corner-all">
   <button id="addButton">Добавить</button>
   <button id="sendButton">Выгрузить</button>
 </div>
@@ -83,6 +37,14 @@
       </tr>
     </thead>
   </table>
+</div>
+<div id="editNoteDialog" title="Редактирование">
+  <fieldset class="fieldset-form">
+    <label for="nameEdit">Имя</label>
+    <input type="text" name="nameEdit" id="nameEdit" class="text ui-widget ui-corner-all">
+    <label for="addressEdit">Адрес</label>
+    <input type="text" name="addressEdit" id="addressEdit" class="text ui-widget ui-corner-all">
+  </fieldset>
 </div>
 </body>
 </html>
