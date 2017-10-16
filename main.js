@@ -119,6 +119,12 @@ function loadApp(usertype) {
         win.window.location.href = 'tests/datatables/index.html'
       }
     }));
+    developmentTestsMenu.append(new nw.MenuItem({
+      label: 'user selection test',
+      click: () => {
+        nw.Window.open('tests/user-selection/index.html');
+      }
+    }));
 
     developmentMenu.append(new nw.MenuItem({
       label: 'Тесты',

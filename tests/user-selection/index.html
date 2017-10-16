@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>user selection test</title>
+  <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="layout.css">
+  <script type="text/javascript" src="../../lib/jquery/jquery.js"></script>
+  <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.js"></script>
+  <script src="main.js"></script>
+  <script>
+    $(() => {
+      initModule();
+    });
+  </script>
+</head>
+<body>
+<div id="loginForm" class="form ui-widget-content">
+  <h3 class="ui-widget-header ui-corner-all">Вход в систему</h3>
+  <fieldset>
+    <label for="userSelect">Пользователь</label>
+    <select name="userSelect" id="userSelect">
+      <option disabled selected>Выберите пользователя</option>
+    </select>
+    <label for="passwordInput">Пароль</label>
+    <input type="password" name="passwordInput" id="passwordInput" class="ui-widget ui-corner-all">
+    <button id="loginButton">Войти</button>
+  </fieldset>
+</div>
+</body>
+</html>
