@@ -4,6 +4,11 @@ const elements = {
   },
   tables: {
     notes: null
+  },
+  inputs: {
+    receipt: null,
+    delivery: null,
+    return: null
   }
 };
 const databases = {
@@ -90,6 +95,10 @@ function moduleInit() {
 
   elements.tables.notes = $('#notesTable');
 
+  elements.inputs.receipt = $('#receiptEdit');
+  elements.inputs.delivery = $('#deliveryEdit');
+  elements.inputs.return = $('#returnEdit');
+
   elements.dialogs.addNote = $('#addNoteDialog').dialog({
     autoOpen: false,
     height: 400,
@@ -111,5 +120,29 @@ function moduleInit() {
         elements.dialogs.addNote.dialog('close');
       }
     }
+  });
+
+  $('#evaluateReceiptButton').button({
+    icon: 'ui-icon-calculator',
+    showLabel: false
+  }).click((event) => {
+    const toEval = elements.inputs.receipt.val();
+    elements.inputs.receipt.val(math.eval(toEval));
+  });
+
+  $('#evaluateDeliveryButton').button({
+    icon: 'ui-icon-calculator',
+    showLabel: false
+  }).click((event) => {
+    const toEval = elements.inputs.delivery.val();
+    elements.inputs.delivery.val(math.eval(toEval));
+  });
+
+  $('#evaluateReturnButton').button({
+    icon: 'ui-icon-calculator',
+    showLabel: false
+  }).click((event) => {
+    const toEval = elements.inputs.return.val();
+    elements.inputs.return.val(math.eval(toEval));
   });
 }

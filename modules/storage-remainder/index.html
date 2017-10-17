@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../lib/jquery-ui/jquery-ui.css">
     <script src="../../lib/jquery/jquery.js"></script>
     <script src="../../lib/jquery-ui/jquery-ui.js"></script>
+    <script src="../../lib/mathjs/math.js"></script>
     <script src="js/main.js"></script>
     <script>
       $( () => {
@@ -41,12 +42,21 @@
 </div>
 <div id="addNoteDialog" title="Добавить запись">
   <fieldset class="fieldset-form">
-    <label for="receiptEdit" class="form">Поступило</label>
-    <input type="number" name="receiptEdit" id="receiptEdit" class="text ui-widget-content ui-corner-all">
-    <label for="deliveryEdit" class="form">Выдано</label>
-    <input type="number" name="deliveryEdit" id="deliveryEdit" class="text ui-widget-content ui-corner-all">
-    <label for="returnEdit" class="form">Дослано/возвращено</label>
-    <input type="number" name="returnEdit" id="returnEdit" class="text ui-widget-content ui-corner-all">
+    <div>
+      <label for="receiptEdit" class="form">Поступило</label>
+      <input type="text" name="receiptEdit" id="receiptEdit" class="text ui-widget-content ui-corner-all">
+      <button id="evaluateReceiptButton">Вычислить</button>
+    </div>
+    <div>
+      <label for="deliveryEdit" class="form">Выдано</label>
+      <input type="text" name="deliveryEdit" id="deliveryEdit" class="text ui-widget-content ui-corner-all">
+      <button id="evaluateDeliveryButton">Вычислить</button>
+    </div>
+    <div>
+      <label for="returnEdit" class="form">Дослано/возвращено</label>
+      <input type="text" name="returnEdit" id="returnEdit" class="text ui-widget-content ui-corner-all">
+      <button id="evaluateReturnButton">Вычислить</button>
+    </div>
   </fieldset>
 </div>
 </body>
