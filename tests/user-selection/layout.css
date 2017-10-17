@@ -15,8 +15,8 @@ fieldset {
 }
 
 #loginForm {
-  width: 300px;
-  height: 150px; 
+  width: 285px;
+  height: 190px; 
   padding: 0.5em;
 }
 
@@ -35,6 +35,15 @@ fieldset {
   padding: 12px;
   border: 2px solid #dddddd;
   border-radius: 4px;
+}
+
+.element {
+  margin-top: 10px;
+}
+
+.type {
+  padding: 5px;
+  border: 1px solid #dddddd;
 }
 
 .disclaimer {
